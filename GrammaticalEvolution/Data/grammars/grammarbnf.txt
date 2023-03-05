@@ -1,0 +1,24 @@
+### START - N ###
+N = {expr, signo, real, K_G, K_P, K_S, nulo, grado, uno-nueve, cero-nueve}
+### END ###
+
+### START - T ###
+T = {“KG”, “KP“, “KS”, “(”, “)”, “+”, “-”, “nulo1”, “nulo2”, “.”, “E”, “0”, “1”, “2”, “3”, “4”, “5”,“6”, “7”, “8”, “9”}
+### END ###
+
+### START - S ###
+S = {expr}
+### END ###
+
+### START -  P ###
+<expr>      ::= <signo><real><K_G> | <signo><real><K_G><expr> | <signo><real>< K_P> | <signo><real>< K_P><expr> | <signo><real>< K_S> | <signo><real>< K_S><expr>
+<K_G>       ::= KG(<real><real><nulo>)
+<K_P>       ::= KP(<real><real><grado>)
+<K_S>       ::= KS(<real><real><nulo>)
+<signo>     ::= + | -
+<real>      ::= <uno-nueve>.<cero-nueve>E<signo><cero-nueve>
+<nulo>      ::= nulo1 | nulo2
+<grado>     ::= 0 | 1 | 2 | 3 | 4
+<uno-nueve> ::= 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8| 9
+<cero-nueve>::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8| 9
+### END ###
