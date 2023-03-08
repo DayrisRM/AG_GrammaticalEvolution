@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GrammaticalEvolution.Abstractions;
 using GrammaticalEvolution_Common.Models;
+using Newtonsoft.Json;
 
 namespace GrammaticalEvolution.Services
 {
@@ -14,7 +15,8 @@ namespace GrammaticalEvolution.Services
         private int _numberIterations { get; set; }
         private int _initialNumberPopulation { get; set; }
         private int _numberMaxCodons { get; set; }
-        private int maxValueCodon { get; set; }
+        private int _numberMinCodons { get; set; }
+        private int _maxValueCodon { get; set; }
         private double _crossoverProbability { get; set; }
         private double _mutationProbability { get; set; }
 
@@ -27,17 +29,43 @@ namespace GrammaticalEvolution.Services
         private ISurvivorsSelectionService ElitistSurvivorsSelectionService { get; set; }
         private IPopulationService PopulationService { get; set; }
 
-
+        LoadFileGrammarBNFService loadFileGrammarBNFService = new LoadFileGrammarBNFService();
+        
 
         public GeneticAlgorithmService()
         {
-           
+            PopulationInitializerService = new RandomPopulationInitializerService();
         }
 
         public Population EvolveAlgorithm() 
         {
             //Initialize population
-            var population = PopulationInitializerService.Initialize(_numberMaxCodons, maxValueCodon, _initialNumberPopulation);
+            _initialNumberPopulation = 10;
+            _numberMinCodons = 16;
+            _numberMaxCodons = 100;
+            _maxValueCodon = 256;
+
+            var population = PopulationInitializerService.Initialize(_numberMinCodons, _numberMaxCodons, _maxValueCodon, _initialNumberPopulation);
+            var grammarBNF = loadFileGrammarBNFService.LoadFile("grammarbnf.txt");
+
+            //test
+            //string json = JsonConvert.SerializeObject(grammarBNF);
+            //var fileName = $"grammarBNFTEST.json";
+            //var pathFile = @"../../../Data/grammars/" + fileName;
+
+            //File.WriteAllTextAsync(pathFile, json);
+
+            //
+
+            GrammarService grammarService = new GrammarService(grammarBNF, true, 100);
+            foreach (var pop in population.CurrentGeneration.Individuals) 
+            {
+                Console.WriteLine(string.Join(",", pop.Genotype));
+                var grammarFn = grammarService.GetGrammar(pop.Genotype); 
+                pop.Grammar = grammarFn;
+                Console.WriteLine(grammarFn);
+                Console.WriteLine("-----------");
+            }
 
             //Evaluate population
             //CalculateFitness(population.CurrentGeneration.Individuals);

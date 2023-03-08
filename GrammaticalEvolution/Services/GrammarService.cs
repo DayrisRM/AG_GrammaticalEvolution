@@ -43,7 +43,7 @@ namespace GrammaticalEvolution.Services
                 return grammarFn;
             }
 
-            if (position > chromosome.Count())
+            if (position >= chromosome.Count())
             {
                 //add wrapping
                 if (_allowWrapping && _actualWrapping <= _maxWrapping) 
@@ -55,7 +55,7 @@ namespace GrammaticalEvolution.Services
                 {
                     throw new Exception($"Wrapping exception - position > chromosome.Count -- position:{position} - chromosomeCount:{chromosome.Count}");
                 }
-            }           
+            } 
 
             var codon = chromosome[position];
             var elementNonTerminal = GetNonTerminalElementInLeftPosition(grammarFn);
@@ -67,10 +67,14 @@ namespace GrammaticalEvolution.Services
                 throw new Exception("ProductionRulesByN can not be empty");
 
             var newSymbol = GetSymbol(codon, productionRulesByN);
+            if(productionRulesByN.Count > 1) 
+            {
+                position += 1;
+            }
 
             var newGrammarFN = ReplaceSymbolWithAnother(grammarFn, elementNonTerminal, newSymbol);
 
-            return GetGrammarRecursively(chromosome, newGrammarFN, position + 1);
+            return GetGrammarRecursively(chromosome, newGrammarFN, position);
         }
 
         private bool HasNonTerminalSymbols(string symbol) 
