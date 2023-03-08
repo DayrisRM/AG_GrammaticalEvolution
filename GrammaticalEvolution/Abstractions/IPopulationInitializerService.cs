@@ -9,6 +9,6 @@ namespace GrammaticalEvolution.Abstractions
 {
     public interface IPopulationInitializerService
     {        
-        Population Initialize(int numberMaxCodons, int maxValueCodon, int initialNumberPopulation);
+        Population Initialize(int numberMinCodons, int numberMaxCodons, int maxValueCodon, int initialNumberPopulation);
     }
 }

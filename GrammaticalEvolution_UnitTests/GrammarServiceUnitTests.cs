@@ -97,5 +97,143 @@ namespace GrammaticalEvolution_UnitTests
             Assert.IsNotNull(newSymbolAfterReplacement);
             Assert.That(newSymbolAfterReplacement.Equals(expected));
         }
+
+
+        public GrammarService InitializeGrammar2Service()
+        {
+            var grammar = new GrammarBNF
+            {
+                S = "expr",
+                T = new List<string>() { 
+                    "“KG”",
+                    "“KP“",
+                    "“KS”",
+                    "“(”",
+                    "“)”",
+                    "“+”",
+                    "“-”",
+                    "“nulo1”",
+                    "“nulo2”",
+                    "“.”",
+                    "“E”",
+                    "“0”",
+                    "“1”",
+                    "“2”",
+                    "“3”",
+                    "“4”",
+                    "“5”",
+                    "“6”",
+                    "“7”",
+                    "“8”",
+                    "“9”" 
+                },
+                N = new List<string>() { 
+                    "expr",
+                    "signo",
+                    "real",
+                    "K_G",
+                    "K_P",
+                    "K_S",
+                    "nulo",
+                    "grado",
+                    "uno-nueve",
+                    "cero-nueve"
+                },
+                P = new Dictionary<string, List<string>>
+                {
+                    { "<expr>", new List<string>() { 
+                        "<signo><real><K_G>",
+                        "<signo><real><K_G><expr>",
+                        "<signo><real><K_P>",
+                        "<signo><real><K_P><expr>",
+                        "<signo><real><K_S>",
+                        "<signo><real><K_S><expr>" } 
+                    },
+                    { "<K_G>", new List<string>() {
+                        "KG(<real><real><nulo>)" }
+                    },
+                    { "<K_P>", new List<string>() {
+                        "KP(<real><real><grado>)" }
+                    },
+                    { "<K_S>", new List<string>() {
+                        "KS(<real><real><nulo>)" }
+                    },
+                    { "<signo>", new List<string>() {
+                        "+",
+                        "-" }
+                    },
+                    { "<real>", new List<string>() {
+                        "<uno-nueve>.<cero-nueve>E<signo><cero-nueve>" }
+                    },
+                    { "<nulo>", new List<string>() {
+                        "nulo1",
+                        "nulo2" }
+                    },
+                    { "<grado>", new List<string>() {
+                        "0",
+                        "1",
+                        "2",
+                        "3",
+                        "4" }
+                    },
+                    { "<uno-nueve>", new List<string>() {
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9" }
+                    },
+                    { "<cero-nueve>", new List<string>() {
+                        "0",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9" }
+                    },
+
+                }
+            };
+            GrammarService grammarService = new GrammarService(grammar, true, 100);
+            return grammarService;
+        }
+
+        [Test]
+        public void Grammar2Test()
+        {
+            var grammarService = InitializeGrammar2Service();
+            var chromosome = new List<int>()
+            {
+                87,26,238,123,121,242,186,140,241,78,207,83,46,27,3,167,73,161,158,70,208,74,22,232,237,135,152,192,206,52,213,131,104,11,51,50,202,86,139,255,76,129,1,164,182,8,107,165,99,229,114,96,178,205,190,236,256,31,15,210,103,23,53,64,142,49,37,132,94,143,188,58,89,25,2,144,246,134,198,66,199,42,7,45,217,250,13,187,156,145,44,219,36,173,32,204,40,234,79,10
+            };
+
+            var grammarFn = grammarService.GetGrammar(chromosome);
+            Assert.IsNotNull(grammarFn);
+            Assert.IsTrue(grammarFn.Contains("<").Equals(false));
+            Assert.IsTrue(grammarFn.Contains(">").Equals(false));
+        }
+
+        [Test]
+        public void Grammar3TestErrorrrr()
+        {
+            var grammarService = InitializeGrammar2Service();
+            var chromosome = new List<int>()
+            {
+                165,56,138,254,77,246,107,164,103,22,21,97,81,207,127,83,121,25,12,115,59,2,90,72,203,157,231,144,232,163
+            };
+
+            var grammarFn = grammarService.GetGrammar(chromosome);
+            Assert.IsNotNull(grammarFn);
+            Assert.IsTrue(grammarFn.Contains("<").Equals(false));
+            Assert.IsTrue(grammarFn.Contains(">").Equals(false));
+        }
     }
 }
