@@ -20,6 +20,8 @@ namespace GrammaticalEvolution.Services
         private double _crossoverProbability { get; set; }
         private double _mutationProbability { get; set; }
 
+        private Function _functionToEval { get; set; }
+
         //Services
         private IPopulationInitializerService PopulationInitializerService { get; set; }
         private IFitnessCalculator FitnessCalculatorService { get; set; }
@@ -32,9 +34,10 @@ namespace GrammaticalEvolution.Services
         LoadFileGrammarBNFService loadFileGrammarBNFService = new LoadFileGrammarBNFService();
         
 
-        public GeneticAlgorithmService()
+        public GeneticAlgorithmService(Function functionToEval)
         {
             PopulationInitializerService = new RandomPopulationInitializerService();
+            _functionToEval = functionToEval;
         }
 
         public Population EvolveAlgorithm() 
@@ -43,7 +46,7 @@ namespace GrammaticalEvolution.Services
             _initialNumberPopulation = 10;
             _numberMinCodons = 16;
             _numberMaxCodons = 100;
-            _maxValueCodon = 256;
+            _maxValueCodon = 256;            
 
             var population = PopulationInitializerService.Initialize(_numberMinCodons, _numberMaxCodons, _maxValueCodon, _initialNumberPopulation);
             var grammarBNF = loadFileGrammarBNFService.LoadFile("grammarbnf.txt");
@@ -65,6 +68,8 @@ namespace GrammaticalEvolution.Services
                 pop.Grammar = grammarFn;
                 Console.WriteLine(grammarFn);
                 Console.WriteLine("-----------");
+                //Calcular el error absoluto
+
             }
 
             //Evaluate population

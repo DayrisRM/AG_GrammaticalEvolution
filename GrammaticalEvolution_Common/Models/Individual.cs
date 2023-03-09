@@ -14,8 +14,9 @@ namespace GrammaticalEvolution_Common.Models
         public string Grammar { get; set; }
 
         //campos relacionados con el fitness
-        public double GrammarEval { get; set; }
+        public double GrammarEval { get; set; } 
         public double FunctionEval { get; set; }
+        public double AbsoluteErrorEval { get; set; }
 
     }
 }
