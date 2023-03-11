@@ -2,8 +2,8 @@
 
 namespace GrammaticalEvolution.Abstractions
 {
-    public interface IFunctionInitializerService
+    public interface IAbsoluteErrorEvaluator
     {
-        Dictionary<string, Function> Initialize();
+        void Eval(Individual individual);
     }
 }

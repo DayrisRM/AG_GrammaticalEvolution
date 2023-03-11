@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace GrammaticalEvolution.Services
 {
-    public class FunctionInitializerService : IFunctionInitializerService
+    public class FunctionInitializerService : IFunctionInitializer
     {
         public Dictionary<string, Function> Initialize()
         {
@@ -55,7 +55,6 @@ namespace GrammaticalEvolution.Services
             
             return functions;
         }
-
 
         private void GenerateMValues(Function function) 
         {
