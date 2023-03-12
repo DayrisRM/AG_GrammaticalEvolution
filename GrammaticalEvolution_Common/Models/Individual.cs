@@ -9,14 +9,12 @@ namespace GrammaticalEvolution_Common.Models
     public class Individual
     {
         public int Id { get; set; }
-        public List<int> Genotype { get; set; } = new List<int>();
-        public double Distance { get; set; }
-        public string Grammar { get; set; }
-
-        //campos relacionados con el fitness
-        public double GrammarEval { get; set; } 
-        public double FunctionEval { get; set; }
+        public List<int> Genotype { get; set; } = new List<int>();       
+        public string Grammar { get; set; }       
         public double AbsoluteErrorEval { get; set; }
+
+        public Dictionary<double, Evaluation> EvaluationData { get; set; } = new Dictionary<double, Evaluation>();
+        
 
     }
 }

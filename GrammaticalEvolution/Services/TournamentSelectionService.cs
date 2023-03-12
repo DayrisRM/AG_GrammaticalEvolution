@@ -46,8 +46,8 @@ namespace GrammaticalEvolution.Services
             var firstIndividual = individuals[firstIndex];
             var secondIndividual = individuals[secondIndex];
 
-            //TSP is minimization problem; we need the shortest distance
-            if (firstIndividual.Distance > secondIndividual.Distance)
+            //minimization problem; we need the min error
+            if (firstIndividual.AbsoluteErrorEval > secondIndividual.AbsoluteErrorEval)
                 return secondIndividual;
 
             return firstIndividual;

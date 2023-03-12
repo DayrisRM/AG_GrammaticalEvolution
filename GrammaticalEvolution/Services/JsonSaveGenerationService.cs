@@ -9,16 +9,39 @@ using GrammaticalEvolution_Common.Models;
 
 namespace GrammaticalEvolution.Services
 {
-    public class JsonSaveGenerationService : ISaveGenerationService
+    public class JsonSavePopulationService : ISavePopulationService
     {
-        public void SaveGenerationJson(int numberExecution, Population population)
+        public void SavePopulationJson(int numberExecution, Population population)
         {
             var populationToSave = PreparePopulationToSave(population);
             string json = JsonConvert.SerializeObject(populationToSave);
             var fileName = $"{numberExecution}_population.json";
-            var pathFile = @"../../../Data/generations/" + fileName;
+            var pathFile = @"../../../Data/populations/" + fileName;
 
             File.WriteAllTextAsync(pathFile, json);
+
+        }
+
+        public void SavePopulationFnEvalJson(int numberExecution, Population population)
+        {
+            var individualToSave = PrepareBestIndividualFnEvalToSave(population);
+            string json = JsonConvert.SerializeObject(individualToSave);
+            var fileName = $"{numberExecution}_population_best_ind_eval.json";
+            var pathFile = @"../../../Data/populations/" + fileName;
+
+            File.WriteAllTextAsync(pathFile, json);
+
+        }
+
+        private Individual PrepareBestIndividualFnEvalToSave(Population population)
+        {
+            var bestIndividual = new Individual()
+            {
+                AbsoluteErrorEval = population.BestIndividual.AbsoluteErrorEval,
+                EvaluationData = population.BestIndividual.EvaluationData
+            };
+
+            return bestIndividual;
         }
 
         private Population PreparePopulationToSave(Population population) 
@@ -32,16 +55,16 @@ namespace GrammaticalEvolution.Services
                     CreationDate = population.CurrentGeneration.CreationDate
                 },                
                 BestIndividual = new Individual()
-                {                    
-                    Distance = population.BestIndividual.Distance
+                {
+                    AbsoluteErrorEval = population.BestIndividual.AbsoluteErrorEval,                    
                 }
             };
 
             if(population.CurrentGeneration.BestIndividual != null) 
             {
                 populationToSave.CurrentGeneration.BestIndividual = new Individual()
-                {                    
-                    Distance = population.CurrentGeneration.BestIndividual.Distance
+                {
+                    AbsoluteErrorEval = population.CurrentGeneration.BestIndividual.AbsoluteErrorEval,                    
                 };
             }
 
@@ -52,7 +75,10 @@ namespace GrammaticalEvolution.Services
                 {
                     GenerationNumber = generation.GenerationNumber,
                     CreationDate = generation.CreationDate,
-                    BestIndividual = new Individual() { Distance = generation.BestIndividual.Distance },
+                    BestIndividual = new Individual() 
+                    { 
+                        AbsoluteErrorEval = generation.BestIndividual.AbsoluteErrorEval
+                    },
                 });
             }
 

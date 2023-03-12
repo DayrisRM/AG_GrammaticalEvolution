@@ -9,44 +9,44 @@ using GrammaticalEvolution_Common.Models;
 
 namespace GrammaticalEvolution.Services
 {
-    public class JsonLoadExecutionService : ILoadExecution<List<Population>>
+    public class JsonLoadEvalExecutionService : ILoadExecution<List<Individual>>
     {
 
         private int _numberExecutions { get; set; }
 
-        public JsonLoadExecutionService(int numberExecutions)
+        public JsonLoadEvalExecutionService(int numberExecutions)
         {
             _numberExecutions = numberExecutions;
         }
                
 
-        public List<Population> Load()
+        public List<Individual> Load()
         {
             var pathFolder = @"../../../Data/populations/";
-            var savedPopulation = new List<Population>();
+            var savedIndividual = new List<Individual>();
 
             for (int i = 1; i <= _numberExecutions; i++)
             {
-                var fileName = $"{i}_population.json";
+                var fileName = $"{i}_population_best_ind_eval.json";
 
                 var population = LoadJson(pathFolder + fileName);
-                savedPopulation.Add(population);
+                savedIndividual.Add(population);
             }
 
-            return savedPopulation;
+            return savedIndividual;
         }
 
-        private Population LoadJson(string pathFile)
+        private Individual LoadJson(string pathFile)
         {
             using (StreamReader r = new StreamReader(pathFile))
             {
                 string json = r.ReadToEnd();
-                var population = JsonConvert.DeserializeObject<Population>(json);
+                var individual = JsonConvert.DeserializeObject<Individual>(json);
 
-                if (population == null)
+                if (individual == null)
                     throw new Exception("Json invalid");
 
-                return population;
+                return individual;
             }
         }
     }

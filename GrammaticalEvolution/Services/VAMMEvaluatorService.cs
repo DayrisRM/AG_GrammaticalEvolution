@@ -12,15 +12,15 @@ namespace GrammaticalEvolution.Services
     {
         public double Evaluate(List<Population> populations)
         {           
-            double sumOfDistance = 0;
+            double sumOfError = 0;
             foreach (var population in populations) 
             {
-                sumOfDistance += population.BestIndividual.Distance;
+                sumOfError += population.BestIndividual.AbsoluteErrorEval;
             }
 
-            sumOfDistance /= populations.Count;
+            sumOfError /= populations.Count;
 
-            return sumOfDistance;
+            return sumOfError;
         }
     }
 }

@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrammaticalEvolution_Common
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrammaticalEvolution_UnitTests", "GrammaticalEvolution_UnitTests\GrammaticalEvolution_UnitTests.csproj", "{AF8A7E57-4253-4B5E-BE9D-52A9A001939E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrammaticalEvolution", "GrammaticalEvolution\GrammaticalEvolution.csproj", "{D3AFB684-3695-433E-AC26-819B5BE817CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrammaticalEvolution", "GrammaticalEvolution\GrammaticalEvolution.csproj", "{D3AFB684-3695-433E-AC26-819B5BE817CD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrammaticalEvolution_Visualization", "GrammaticalEvolution_Visualization\GrammaticalEvolution_Visualization.csproj", "{E8C45DFD-D4A0-429E-9F39-5CB38D589FED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{D3AFB684-3695-433E-AC26-819B5BE817CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3AFB684-3695-433E-AC26-819B5BE817CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3AFB684-3695-433E-AC26-819B5BE817CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8C45DFD-D4A0-429E-9F39-5CB38D589FED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8C45DFD-D4A0-429E-9F39-5CB38D589FED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8C45DFD-D4A0-429E-9F39-5CB38D589FED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8C45DFD-D4A0-429E-9F39-5CB38D589FED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

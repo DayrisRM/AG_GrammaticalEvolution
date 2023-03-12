@@ -22,3 +22,10 @@
 /.vs/AG_GrammaticalEvolution/DesignTimeBuild/*.v2
 /.vs/SymbolicRegression_GrammaticalEvolution/DesignTimeBuild/*.v2
 /.vs/SymbolicRegression_GrammaticalEvolution/FileContentIndex/*.lock
+/GrammaticalEvolution/Data/figures
+/GrammaticalEvolution/Data/populations
+/GrammaticalEvolution_Visualization/bin/Debug/net6.0/*.dll
+/GrammaticalEvolution_Visualization/bin/Debug/net6.0/*.pdb
+/GrammaticalEvolution_Visualization/bin/Debug/net6.0
+/GrammaticalEvolution_Visualization/obj/Debug/net6.0
+/GrammaticalEvolution_Visualization/obj

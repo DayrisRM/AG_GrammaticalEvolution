@@ -7,8 +7,9 @@ using GrammaticalEvolution_Common.Models;
 
 namespace GrammaticalEvolution.Abstractions
 {
-    public interface ISaveGenerationService
+    public interface ISavePopulationService
     {
-        public void SaveGenerationJson(int numberExecution, Population population);
+        void SavePopulationFnEvalJson(int numberExecution, Population population);
+        public void SavePopulationJson(int numberExecution, Population population);
     }
 }
