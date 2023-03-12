@@ -16,10 +16,12 @@
 	<ItemGroup>
 		<Folder Include="Data\generations\" />
 		<Folder Include="Data\figures\" />
+		<Folder Include="Data\populations\" />
 	</ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GrammaticalEvolution_Common\GrammaticalEvolution_Common.csproj" />
+    <ProjectReference Include="..\GrammaticalEvolution_Visualization\GrammaticalEvolution_Visualization.csproj" />
   </ItemGroup>
 
 </Project>

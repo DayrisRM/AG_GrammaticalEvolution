@@ -16,7 +16,7 @@ namespace GrammaticalEvolution.Services
                 throw new ArgumentNullException(nameof(individuals));
 
             //calculate best individual in current generation
-            var bestIndividual = population.CurrentGeneration.Individuals.OrderBy(x => x.Distance).FirstOrDefault();
+            var bestIndividual = population.CurrentGeneration.Individuals.OrderBy(x => x.AbsoluteErrorEval).FirstOrDefault();
             population.CurrentGeneration.BestIndividual = bestIndividual;
 
             //insert current generation into the history of generations
@@ -39,7 +39,7 @@ namespace GrammaticalEvolution.Services
         {
             //check if bestIndividual or generation is better than best individual of population
             if (population.BestIndividual == null || 
-                bestIndividualCurrentGeneration.Distance < population.BestIndividual.Distance) 
+                bestIndividualCurrentGeneration.AbsoluteErrorEval < population.BestIndividual.AbsoluteErrorEval) 
             {
                 population.BestIndividual = bestIndividualCurrentGeneration;
             }            

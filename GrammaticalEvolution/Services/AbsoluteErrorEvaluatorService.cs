@@ -65,16 +65,7 @@ namespace GrammaticalEvolution.Services
                 var fnVal = FunEval(functionToEval.Name, x);
 
                 //eval grammarFn
-                var grammarVal = GrammarEval(individual.Grammar, x);
-
-                if (grammarVal == 0)
-                {
-                    Console.WriteLine($"GETSUM -- {individual.Grammar} -- {x} -- fnVal:{fnVal}");
-                }
-                else 
-                {
-                    var pepe = "";
-                }
+                var grammarVal = GrammarEval(individual.Grammar, x);                
 
                 //get absFN
                 var abs = GetAbsFn(fnVal, grammarVal);
@@ -83,6 +74,9 @@ namespace GrammaticalEvolution.Services
                 var w = GetW(abs);
 
                 sumError += w * abs;
+
+                individual.EvaluationData.Add(x, new Evaluation() { FunctionEval = fnVal, GrammarEval = grammarVal });
+
             }
 
             return sumError;

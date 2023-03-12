@@ -9,6 +9,6 @@ namespace GrammaticalEvolution.Abstractions
 {
     public interface IFitnessCalculator
     {
-        Individual Evaluate(Individual individual);
+        void Evaluate(Individual individual);
     }
 }

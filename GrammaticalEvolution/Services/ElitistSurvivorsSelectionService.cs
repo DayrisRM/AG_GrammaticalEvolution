@@ -12,11 +12,11 @@ namespace GrammaticalEvolution.Services
     {
         public List<Individual> SelectIndividuals(List<Individual> parents, List<Individual> children)
         {
-            //TSP is minimization problem; we need the shortest distance
-            var bestParent = parents.OrderBy(x => x.Distance).Take(1).FirstOrDefault();
-            var worstChildren = children.OrderByDescending(x => x.Distance).Take(1).FirstOrDefault();
+            //Minimization problem; we need the Min error
+            var bestParent = parents.OrderBy(x => x.AbsoluteErrorEval).Take(1).FirstOrDefault();
+            var worstChildren = children.OrderByDescending(x => x.AbsoluteErrorEval).Take(1).FirstOrDefault();
 
-            if(worstChildren.Distance > bestParent.Distance) 
+            if(worstChildren.AbsoluteErrorEval > bestParent.AbsoluteErrorEval) 
             {
                 children.Remove(worstChildren);
                 children.Add(bestParent);

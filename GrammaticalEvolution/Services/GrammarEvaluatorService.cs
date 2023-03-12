@@ -41,9 +41,10 @@ namespace GrammaticalEvolution.Services
 
             }
             catch (Exception e) 
-            {
+            {                
                 Console.WriteLine("fn: " + fn);
                 Console.WriteLine(grammar + "---" + x);
+                throw;
             }            
             
             return eval;

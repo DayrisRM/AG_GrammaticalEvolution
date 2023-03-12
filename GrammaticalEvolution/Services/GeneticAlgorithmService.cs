@@ -17,6 +17,8 @@ namespace GrammaticalEvolution.Services
         private int _numberMaxCodons { get; set; }
         private int _numberMinCodons { get; set; }
         private int _maxValueCodon { get; set; }
+        private bool _allowWrapping { get; set; }
+        private int _maxWrapping { get; set; }
         private double _crossoverProbability { get; set; }
         private double _mutationProbability { get; set; }
 
@@ -31,59 +33,73 @@ namespace GrammaticalEvolution.Services
         private ISurvivorsSelectionService ElitistSurvivorsSelectionService { get; set; }
         private IPopulationService PopulationService { get; set; }
 
-        LoadFileGrammarBNFService loadFileGrammarBNFService = new LoadFileGrammarBNFService();
+        private ILoadFileService<GrammarBNF> LoadFileGrammarBNFService { get; set; }
 
         private IAbsoluteErrorEvaluator AbsoluteErrorEvaluatorService { get; set; }
 
+        private GrammarService GrammarService { get; set; }
 
-        public GeneticAlgorithmService(Function functionToEval)
+
+        public GeneticAlgorithmService(int initialNumberPopulation, int numberIterations, double crossoverProbability, 
+            double mutationProbability, Function functionToEval, int numberMinCodons, int numberMaxCodons, int maxValueCodon,
+            bool allowWrapping, int maxWrapping, GrammarBNF grammar)
         {
-            PopulationInitializerService = new RandomPopulationInitializerService();
+            _initialNumberPopulation = initialNumberPopulation > 0 ? initialNumberPopulation : throw new ArgumentOutOfRangeException(nameof(initialNumberPopulation));
+            _numberIterations = numberIterations > 0 ? numberIterations : throw new ArgumentOutOfRangeException(nameof(numberIterations));           
+            _crossoverProbability = crossoverProbability;
+            _mutationProbability = mutationProbability;
             _functionToEval = functionToEval;
+            _numberMinCodons = numberMinCodons;
+            _numberMaxCodons = numberMaxCodons;
+            _maxValueCodon = maxValueCodon;
+            _allowWrapping = allowWrapping;
+            _maxWrapping = maxWrapping;
+
+            PopulationInitializerService = new RandomPopulationInitializerService();
+            GrammarService = new GrammarService(grammar, _allowWrapping, _maxWrapping);
+            FitnessCalculatorService = new FitnessCalculatorService(functionToEval, GrammarService);
+            TournamentSelectionService = new TournamentSelectionService(_initialNumberPopulation);
+            CrossoverService = new CrossoverService(_crossoverProbability);
+            MutationService = new MutationService(_mutationProbability);
+            ElitistSurvivorsSelectionService = new ElitistSurvivorsSelectionService();
+            PopulationService = new PopulationService();
+            LoadFileGrammarBNFService = new LoadFileGrammarBNFService();
             AbsoluteErrorEvaluatorService = new AbsoluteErrorEvaluatorService(_functionToEval);            
         }
 
         public Population EvolveAlgorithm() 
         {
             //Initialize population
-            _initialNumberPopulation = 10;
-            _numberMinCodons = 16;
-            _numberMaxCodons = 100;
-            _maxValueCodon = 256;            
-
             var population = PopulationInitializerService.Initialize(_numberMinCodons, _numberMaxCodons, _maxValueCodon, _initialNumberPopulation);
-            var grammarBNF = loadFileGrammarBNFService.LoadFile("grammarbnf.txt");
-
-            //test
-            //string json = JsonConvert.SerializeObject(grammarBNF);
-            //var fileName = $"grammarBNFTEST.json";
-            //var pathFile = @"../../../Data/grammars/" + fileName;
-
-            //File.WriteAllTextAsync(pathFile, json);
-
-            //
-
-            GrammarService grammarService = new GrammarService(grammarBNF, true, 100);
-            foreach (var pop in population.CurrentGeneration.Individuals) 
-            {
-                Console.WriteLine(string.Join(",", pop.Genotype));
-                var grammarFn = grammarService.GetGrammar(pop.Genotype); 
-                pop.Grammar = grammarFn;
-                Console.WriteLine(grammarFn);
-                Console.WriteLine("-----------");
-                AbsoluteErrorEvaluatorService.Eval(pop);
-                Console.WriteLine($"absErro:{pop.AbsoluteErrorEval}");
-                Console.WriteLine("-----------");   
-            }
 
             //Evaluate population
-            //CalculateFitness(population.CurrentGeneration.Individuals);
+            CalculateFitness(population.CurrentGeneration.Individuals);
 
-            //bucle
+
+            //iterations
             var actualIteration = 1;
-            while (actualIteration <= _numberIterations) 
+            while (actualIteration <= _numberIterations)
             {
-               
+                Console.WriteLine("Iteration " + actualIteration);
+
+                //select parents by tournament              
+                var tournamentResult = TournamentSelectionService.Select(population.CurrentGeneration.Individuals);
+
+                //cross parents by partially mapped               
+                var crossResult = CrossoverService.SelectParentsAndCrossIfPossible(tournamentResult);
+
+                //mutate using swap mutation
+                var mutatedElements = MutationService.Mutate(crossResult);
+
+                //evaluate mutated elements
+                CalculateFitness(mutatedElements);
+
+                //select survivors
+                var newIndividuals = ElitistSurvivorsSelectionService.SelectIndividuals(population.CurrentGeneration.Individuals, mutatedElements);
+
+                //add new generation to population
+                PopulationService.CreateNewGeneration(population, newIndividuals);
+                actualIteration++;
             }
             //return population. We will show the best individual
             return population;
@@ -96,25 +112,6 @@ namespace GrammaticalEvolution.Services
                 FitnessCalculatorService.Evaluate(ind);
             }
             );            
-        }
-
-        private Tuple<bool, List<Individual>> CheckIndividualHasRepeatedGene(List<Individual> individuals) 
-        {
-            var hasRepeated = false;
-            var individualWithRepeatedGene = new List<Individual>();
-
-            foreach (var ind in individuals) 
-            {
-                var notRepeatedGenesLength = ind.Genotype.Distinct().Count();
-
-                if (notRepeatedGenesLength < ind.Genotype.Count)
-                {
-                    hasRepeated = true;
-                    individualWithRepeatedGene.Add(ind);
-                }
-            }            
-
-            return new Tuple<bool, List<Individual>>(hasRepeated, individualWithRepeatedGene);
         }
 
     }

@@ -10,9 +10,20 @@ namespace GrammaticalEvolution.Services
 {
     public class FitnessCalculatorService : IFitnessCalculator
     {
-        public Individual Evaluate(Individual individual)
+        IAbsoluteErrorEvaluator AbsoluteErrorEvaluator { get; set; }
+        GrammarService GrammarService { get; set; }
+
+        public FitnessCalculatorService(Function functionToEval, GrammarService grammarService) 
         {
-            throw new NotImplementedException();
+            AbsoluteErrorEvaluator = new AbsoluteErrorEvaluatorService(functionToEval);
+            GrammarService = grammarService;
+        }
+
+        public void Evaluate(Individual individual)
+        {
+            var grammarFn = GrammarService.GetGrammar(individual.Genotype);
+            individual.Grammar = grammarFn;
+            AbsoluteErrorEvaluator.Eval(individual);
         }
     }
 }
