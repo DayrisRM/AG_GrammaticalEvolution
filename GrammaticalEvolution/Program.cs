@@ -25,3 +25,6 @@ void ExecuteGA()
     GeneticAlgorithmService geneticAlgorithmService = new GeneticAlgorithmService(selectedFn);
     geneticAlgorithmService.EvolveAlgorithm();
 }
+
+
+

@@ -10,6 +10,7 @@
 	<ItemGroup>
 		<PackageReference Include="DynamicExpresso.Core" Version="2.13.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="MathParser.org-mXparser" Version="5.2.1" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -17,14 +17,19 @@ namespace GrammaticalEvolution.Services
         private const int K1 = 10;
         private const double U = 0.1;
 
+        IGrammarEvaluator GrammarEvaluator { get; set; }
+
         public AbsoluteErrorEvaluatorService(Function functionToEval)
         {
             _functionToEval = functionToEval;
+            GrammarEvaluator = new GrammarEvaluatorService();
         }
         public void Eval(Individual individual)
         {
             var sumError = GetSumError(_functionToEval, individual);
-            var eval = (1 / _functionToEval.M) * sumError;
+            var eval = ((double)1 / _functionToEval.M) * sumError;
+
+            eval = Math.Round(eval, 4);
 
             individual.AbsoluteErrorEval = eval;
         }
@@ -62,6 +67,15 @@ namespace GrammaticalEvolution.Services
                 //eval grammarFn
                 var grammarVal = GrammarEval(individual.Grammar, x);
 
+                if (grammarVal == 0)
+                {
+                    Console.WriteLine($"GETSUM -- {individual.Grammar} -- {x} -- fnVal:{fnVal}");
+                }
+                else 
+                {
+                    var pepe = "";
+                }
+
                 //get absFN
                 var abs = GetAbsFn(fnVal, grammarVal);
 
@@ -76,9 +90,7 @@ namespace GrammaticalEvolution.Services
 
         private double GrammarEval(string grammar, double x)
         {
-            double eval = 0;
-            //Call to grammar evaluator service
-            return eval;
+            return GrammarEvaluator.Eval(grammar, x);           
         }
 
         private double FunEval(string functionName, double x)
@@ -100,6 +112,8 @@ namespace GrammaticalEvolution.Services
                     eval = FunctionUtils.F4(x);
                     break;
             }
+
+            eval = Math.Round(eval, 4);
 
             return eval;
         }

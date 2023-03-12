@@ -32,12 +32,15 @@ namespace GrammaticalEvolution.Services
         private IPopulationService PopulationService { get; set; }
 
         LoadFileGrammarBNFService loadFileGrammarBNFService = new LoadFileGrammarBNFService();
-        
+
+        private IAbsoluteErrorEvaluator AbsoluteErrorEvaluatorService { get; set; }
+
 
         public GeneticAlgorithmService(Function functionToEval)
         {
             PopulationInitializerService = new RandomPopulationInitializerService();
             _functionToEval = functionToEval;
+            AbsoluteErrorEvaluatorService = new AbsoluteErrorEvaluatorService(_functionToEval);            
         }
 
         public Population EvolveAlgorithm() 
@@ -68,8 +71,9 @@ namespace GrammaticalEvolution.Services
                 pop.Grammar = grammarFn;
                 Console.WriteLine(grammarFn);
                 Console.WriteLine("-----------");
-                //Calcular el error absoluto
-
+                AbsoluteErrorEvaluatorService.Eval(pop);
+                Console.WriteLine($"absErro:{pop.AbsoluteErrorEval}");
+                Console.WriteLine("-----------");   
             }
 
             //Evaluate population

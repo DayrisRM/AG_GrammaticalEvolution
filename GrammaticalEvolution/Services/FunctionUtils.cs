@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,12 +50,20 @@ namespace GrammaticalEvolution.Services
         public static double Kp(double x, double a, double b, double d)
         {            
             var basePart = (a * x) + b;
-            return Math.Pow(basePart, d);
+            var pow = Math.Pow(basePart, d); 
+            
+            return RoundDouble(pow);
         }
 
         public static double Ks(double x, double a, double b)
         {            
             return Math.Tanh(a* x + b);
+        }
+
+        private static double RoundDouble(double value) 
+        {
+            string roundedDouble = value.ToString("0.00E+00", CultureInfo.InvariantCulture);
+            return Convert.ToDouble(roundedDouble);
         }
 
     }

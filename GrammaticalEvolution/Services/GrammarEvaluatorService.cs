@@ -3,7 +3,9 @@ using System.Text.RegularExpressions;
 using System;
 using System.Globalization;
 using System.IO;
-using DynamicExpresso;
+//using DynamicExpresso;
+using org.mariuszgromada.math.mxparser;
+using Expression = org.mariuszgromada.math.mxparser.Expression;
 
 namespace GrammaticalEvolution.Services
 {
@@ -13,25 +15,38 @@ namespace GrammaticalEvolution.Services
         public const string KernelKP = "KP";
         public const string KernelKS = "KS";
 
+        public GrammarEvaluatorService() 
+        {
+            RemoveLibraryMsg();
+        }    
+
         public double Eval(string grammar, double x)
         {
             double eval = 0;
-            grammar = ReplaceKernels(grammar, x);
-            var fn = ReplaceENotation(grammar);
-
-            if (fn.StartsWith("*")) 
+            var fn = "";
+            try
             {
-                fn = fn.Insert(0, "1");
+                var replacedGrammar = ReplaceKernels(grammar, x);
+                fn = replacedGrammar.Replace(",", ".");                 
+
+                if (fn.StartsWith("*"))
+                {
+                    fn = fn.Insert(0, "1");
+                }
+
+                fn = fn.Replace(",", ".");
+
+                Expression expression = new Expression(fn);
+                eval = expression.calculate();
+
             }
-
-            fn = fn.Replace(",", ".");
-
-            var interpreter = new Interpreter();
-            var result = interpreter.Eval(fn);
-
-            eval = Convert.ToDouble(result.ToString());
+            catch (Exception e) 
+            {
+                Console.WriteLine("fn: " + fn);
+                Console.WriteLine(grammar + "---" + x);
+            }            
             
-            return Math.Round(eval, 4); ;
+            return eval;
         }
 
         public string ReplaceKernels(string grammar, double x) 
@@ -84,8 +99,7 @@ namespace GrammaticalEvolution.Services
                                 break;
                         }
                         
-                    }
-                    valueKernel = Math.Round(valueKernel, 4);
+                    }                   
                     grammarWithReplacement = grammarWithReplacement.Replace(match.Value.ToString(), $"*({valueKernel})");
                 }
             }
@@ -97,7 +111,8 @@ namespace GrammaticalEvolution.Services
         {
             var grammarWithReplacement = grammar;
 
-            Regex _notationERegex = new Regex($"[+\\-](?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+\\-]?\\d+)?", RegexOptions.Compiled);
+            //Regex _notationERegex = new Regex($"[+\\-](?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+\\-]?\\d+)?", RegexOptions.Compiled);
+            Regex _notationERegex = new Regex($"(?:0|[1-9]\\d*)(?:\\.\\d+)?[eE][+\\-]?[0-9]+", RegexOptions.Compiled);            
 
             var matches = _notationERegex.Matches(grammar);
 
@@ -106,11 +121,24 @@ namespace GrammaticalEvolution.Services
                 foreach (Match match in matches)
                 {
                     decimal h = Decimal.Parse(match.Value, NumberStyles.Float | NumberStyles.AllowExponent, CultureInfo.InvariantCulture);
-                    grammarWithReplacement = grammarWithReplacement.Replace(match.Value.ToString(), $"*({h})");                    
+                    grammarWithReplacement = grammarWithReplacement.Replace(match.Value.ToString(), $"{h}");                    
                 }
             }
 
             return grammarWithReplacement;
         }
+
+        private void RemoveLibraryMsg()
+        {
+            /* Non-Commercial Use Confirmation */
+            var isCallSuccessful = License.iConfirmNonCommercialUse("John Doe");
+
+            /* Verification if use type has been already confirmed */
+            var isConfirmed = License.checkIfUseTypeConfirmed();
+
+            /* Checking use type confirmation message */
+            String message = License.getUseTypeConfirmationMessage();
+        }
+
     }
 }
