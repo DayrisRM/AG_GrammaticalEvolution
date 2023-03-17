@@ -32,7 +32,8 @@ namespace GrammaticalEvolution.Services
 
             for(var i = 0; i < _numberOfTournament; i++) 
             {
-                tournamentResult.Add(DoTournamentWithSizeTwo(individuals));          
+                var tournamentInd = DoTournamentWithSizeTwo(individuals);
+                tournamentResult.Add((Individual)tournamentInd.Clone());          
             }
 
             return tournamentResult;

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace GrammaticalEvolution_Common.Models
 {
-    public class Individual
+    [Serializable()]
+    public class Individual : ICloneable
     {
         public int Id { get; set; }
         public List<int> Genotype { get; set; } = new List<int>();       
@@ -14,7 +15,10 @@ namespace GrammaticalEvolution_Common.Models
         public double AbsoluteErrorEval { get; set; }
 
         public Dictionary<double, Evaluation> EvaluationData { get; set; } = new Dictionary<double, Evaluation>();
-        
 
+        public object Clone()
+        {
+            return CloneUtils.Clone(this);
+        }
     }
 }

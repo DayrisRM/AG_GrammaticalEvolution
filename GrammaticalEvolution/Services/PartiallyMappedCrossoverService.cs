@@ -24,20 +24,7 @@ namespace GrammaticalEvolution.Services
         }
 
         public List<Individual> Cross(List<Individual> parents)
-        {
-            var checkPoint = CheckIndividualHasRepeatedGene(parents);
-            if (checkPoint.Item1 == true)
-            {
-                var pepe = checkPoint.Item2[0].Genotype.GroupBy(x => x)
-                     .Where(g => g.Count() > 1)
-                     .Select(x => x.Key)
-                     .ToList();
-
-                throw new Exception("IndividualHasRepeatedGene checkpoint1");
-            }
-
-
-
+        {          
             var descendants = new List<Individual>();
 
             var parent1 = parents[0];

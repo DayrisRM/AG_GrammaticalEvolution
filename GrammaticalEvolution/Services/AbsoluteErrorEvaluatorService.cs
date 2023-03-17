@@ -25,7 +25,7 @@ namespace GrammaticalEvolution.Services
             GrammarEvaluator = new GrammarEvaluatorService();
         }
         public void Eval(Individual individual)
-        {
+        {            
             var sumError = GetSumError(_functionToEval, individual);
             var eval = ((double)1 / _functionToEval.M) * sumError;
 
@@ -65,7 +65,12 @@ namespace GrammaticalEvolution.Services
                 var fnVal = FunEval(functionToEval.Name, x);
 
                 //eval grammarFn
-                var grammarVal = GrammarEval(individual.Grammar, x);                
+                var grammarVal = GrammarEval(individual.Grammar, x);  
+                
+                if(grammarVal == 0) 
+                {
+                    Console.WriteLine($"GrammarEval is 0 ---> grammar:{individual.Grammar} -- x:{x} -- fEval: {fnVal}");
+                }
 
                 //get absFN
                 var abs = GetAbsFn(fnVal, grammarVal);
@@ -74,7 +79,7 @@ namespace GrammaticalEvolution.Services
                 var w = GetW(abs);
 
                 sumError += w * abs;
-
+                
                 individual.EvaluationData.Add(x, new Evaluation() { FunctionEval = fnVal, GrammarEval = grammarVal });
 
             }

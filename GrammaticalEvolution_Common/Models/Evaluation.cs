@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GrammaticalEvolution_Common.Models
 {
+    [Serializable()]
     public class Evaluation
     {
         public double GrammarEval { get; set; }

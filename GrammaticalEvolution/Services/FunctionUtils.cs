@@ -16,7 +16,7 @@ namespace GrammaticalEvolution.Services
             var exp1 = -2 * pow;
             var eX1 = Math.Exp(exp1);
 
-            return 8 * eX1 + ((2 * x) + 1) + 3 * Math.Tan((3 * x) + 2); 
+            return 8 * eX1 + ((2 * x) + 1) + 3 * Math.Tanh((3 * x) + 2); 
         }
         public static double F2(double x) 
         {
@@ -35,7 +35,7 @@ namespace GrammaticalEvolution.Services
         }
         public static double F4(double x) 
         {
-            var eX = Math.Exp(x);
+            var eX = Math.Exp(-x);
             var sen = Math.Sin(2 * x);
             return eX * sen;
         }

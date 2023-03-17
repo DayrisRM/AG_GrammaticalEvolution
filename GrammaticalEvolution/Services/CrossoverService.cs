@@ -42,14 +42,14 @@ namespace GrammaticalEvolution.Services
                 var p = _randomGeneratorNumbersService.GetDouble();
                 if(p <= _crossoverProbability) 
                 {
-                    var crossoverResult = _partiallyMappedCrossoverService.Cross(new List<Individual>() { parent1, parent2 });
+                    var crossoverResult = _partiallyMappedCrossoverService.Cross(new List<Individual>() { (Individual)parent1.Clone(), (Individual)parent2.Clone() });
                     chields.AddRange(crossoverResult);
                 }
                 else 
                 {
                     //Include parents to childs
-                    chields.Add(parent1);
-                    chields.Add(parent2);
+                    chields.Add((Individual)parent1.Clone());
+                    chields.Add((Individual)parent2.Clone());
                 }
 
             }
