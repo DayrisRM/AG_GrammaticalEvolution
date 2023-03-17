@@ -2,6 +2,7 @@
 using ScottPlot.Statistics;
 using GrammaticalEvolution_Common.Models;
 using Population = GrammaticalEvolution_Common.Models.Population;
+using ScottPlot;
 
 namespace TSP_Visualization
 {
@@ -62,5 +63,27 @@ namespace TSP_Visualization
 
         }
         
+        public void CreateFunctionEvalPlot(Individual individual, int i) 
+        {
+            var plt = new ScottPlot.Plot();
+
+            var title = $"Eval fn y faprox";
+            plt.Title(title);
+            var fileName = $"f_eval_{i}.png";
+
+            double[] xs = individual.EvaluationData.Keys.ToArray();
+            double[] fEval = individual.EvaluationData.Values.Select(x => x.FunctionEval).ToArray();
+            double[] faproxEval = individual.EvaluationData.Values.Select(x => x.GrammarEval).ToArray();
+
+            plt.AddScatter(xs, fEval, label: "F");
+            plt.AddScatter(xs, faproxEval, label: "Faprox");
+            plt.Legend();
+
+            plt.XAxis.Label("x");
+            plt.YAxis.Label("eval");
+
+            plt.SaveFig(@"../../../Data/figures/" + fileName);
+
+        }
     }
 }

@@ -2,6 +2,7 @@
 using GrammaticalEvolution.Abstractions;
 using GrammaticalEvolution.Services;
 using GrammaticalEvolution_Common.Models;
+using System.Collections.Generic;
 using TSP_Visualization;
 
 Console.WriteLine("Hello, World!");
@@ -17,9 +18,10 @@ var executionData = new ExecutionGA()
     MaxValueCodon = 256,
     MaxWrapping = 500,
     AllowWrapping = true,
-    CrossoverProbability = 1,
-    MutationProbability = 1
+    CrossoverProbability = 0.9,
+    MutationProbability = 0.2
 };
+
 
 
 //Load grammar BNF
@@ -30,7 +32,6 @@ var grammarBNF = loadFileGrammarBNFService.LoadFile("grammarbnf.txt");
 IFunctionInitializer functionInitializerService = new FunctionInitializerService();
 var functions = functionInitializerService.Initialize();
 var selectedFn = functions["F1"];
-
 
 ExecuteGA();
 
@@ -101,8 +102,12 @@ void ExecuteGA()
     //Create Fn errors
     ILoadExecution<List<Individual>> JsonLoadEvalExecutionService = new JsonLoadEvalExecutionService(executionData.NumberExecutions);
     var savedIndividuals = JsonLoadEvalExecutionService.Load();
-    //TODO: Definir con quién pintar la gráfica
-
+    //TODO: Definir con qué valores pintar la gráfica
+    for(var i = 0; i < savedIndividuals.Count; i++) 
+    {
+        createPlot.CreateFunctionEvalPlot(savedIndividuals[i], i);
+    }
+   
 }
 
 

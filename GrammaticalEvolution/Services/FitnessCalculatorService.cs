@@ -23,6 +23,12 @@ namespace GrammaticalEvolution.Services
         {
             var grammarFn = GrammarService.GetGrammar(individual.Genotype);
             individual.Grammar = grammarFn;
+
+            if(individual.EvaluationData.Keys.Count > 0) 
+            {
+                individual.EvaluationData = new Dictionary<double, Evaluation>();
+            }
+
             AbsoluteErrorEvaluator.Eval(individual);
         }
     }

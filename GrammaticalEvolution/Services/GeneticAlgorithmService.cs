@@ -69,6 +69,8 @@ namespace GrammaticalEvolution.Services
 
         public Population EvolveAlgorithm() 
         {
+            Console.WriteLine("Initialize population and initial evaluation");
+
             //Initialize population
             var population = PopulationInitializerService.Initialize(_numberMinCodons, _numberMaxCodons, _maxValueCodon, _initialNumberPopulation);
 
@@ -91,7 +93,15 @@ namespace GrammaticalEvolution.Services
                 //mutate using swap mutation
                 var mutatedElements = MutationService.Mutate(crossResult);
 
+                //check elements duplicated
+                var checkPoint1 = CheckIndividualHasRepeatedGene(mutatedElements);
+                if (checkPoint1.Item1 == true)
+                {
+                    throw new Exception("IndividualHasRepeatedGene GA3");
+                }
+
                 //evaluate mutated elements
+                mutatedElements = CleanEvaluationDataFitness(mutatedElements, actualIteration);
                 CalculateFitness(mutatedElements);
 
                 //select survivors
@@ -106,13 +116,50 @@ namespace GrammaticalEvolution.Services
         }
 
         private void CalculateFitness(List<Individual> individuals) 
-        {
-            Parallel.ForEach(individuals, ind =>
-            {
-                FitnessCalculatorService.Evaluate(ind);
+        {        
+            foreach(var indx in individuals) 
+            {               
+                FitnessCalculatorService.Evaluate(indx);                
             }
-            );            
         }
+
+        private List<Individual> CleanEvaluationDataFitness(List<Individual> individuals, int actualIteration)
+        {
+            var i = 1;
+            foreach (var ind in individuals)
+            {
+                var calculatedId = $"{actualIteration}{i}";
+                ind.Id = Convert.ToInt32(calculatedId);
+                ind.AbsoluteErrorEval = 0;
+                ind.EvaluationData = new Dictionary<double, Evaluation>();
+                ind.Grammar = "";
+
+                i++;
+            }
+
+            return individuals;
+        }
+
+
+        private Tuple<bool, List<Individual>> CheckIndividualHasRepeatedGene(List<Individual> individuals)
+        {
+            var hasRepeated = false;
+            var individualWithRepeatedGene = new List<Individual>();
+
+            foreach (var ind in individuals)
+            {
+                var notRepeatedGenesLength = ind.Genotype.Distinct().Count();
+
+                if (notRepeatedGenesLength < ind.Genotype.Count)
+                {
+                    hasRepeated = true;
+                    individualWithRepeatedGene.Add(ind);
+                }
+            }
+
+            return new Tuple<bool, List<Individual>>(hasRepeated, individualWithRepeatedGene);
+        }
+
 
     }
 }
