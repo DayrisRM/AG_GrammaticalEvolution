@@ -24,6 +24,12 @@ namespace GrammaticalEvolution.Services
         {
             double eval = 0;
             var fn = "";
+
+            if (grammar.Contains("<") || grammar.Contains(">"))
+            {
+               return double.MaxValue;
+            }
+
             try
             {
                 var replacedGrammar = ReplaceKernels(grammar, x);

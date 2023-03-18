@@ -32,7 +32,7 @@ namespace GrammaticalEvolution.Services
             for (int i = 1; i <= initialNumberPopulation; i++)
             {
                 var numberCodons = _randomGeneratorNumbersService.GetInt(numberMinCodons, numberMaxCodons);               
-                var codonsIndexes = _randomGeneratorNumbersService.GetUniqueInts(numberCodons, 1, maxValueCodon + 1);
+                var codonsIndexes = _randomGeneratorNumbersService.GetUniqueInts(numberCodons, 0, maxValueCodon);
                 if (codonsIndexes == null)
                 {
                     throw new Exception("Codons indexes must not be null");

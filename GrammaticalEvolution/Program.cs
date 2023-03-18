@@ -15,8 +15,8 @@ var executionData = new ExecutionGA()
     NumberExecutions = 1,
     NumberMinCodons = 30,
     NumberMaxCodons = 100,
-    MaxValueCodon = 256,
-    MaxWrapping = 500,
+    MaxValueCodon = 255,
+    MaxWrapping = 2,
     AllowWrapping = true,
     CrossoverProbability = 0.9,
     MutationProbability = 0.2
@@ -31,7 +31,7 @@ var grammarBNF = loadFileGrammarBNFService.LoadFile("grammarbnf.txt");
 //create functions to symbolic regression
 IFunctionInitializer functionInitializerService = new FunctionInitializerService();
 var functions = functionInitializerService.Initialize();
-var selectedFn = functions["F1"];
+var selectedFn = functions["F2"];
 
 ExecuteGA();
 
