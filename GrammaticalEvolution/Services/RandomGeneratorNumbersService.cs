@@ -34,7 +34,7 @@ namespace GrammaticalEvolution.Services
             return ints;
         }
 
-        public int GetInt(int min, int max)
+        public virtual int GetInt(int min, int max)
         {
             return _Random.Next(min, max);
         }
