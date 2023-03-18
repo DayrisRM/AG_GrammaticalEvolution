@@ -88,17 +88,10 @@ namespace GrammaticalEvolution.Services
                 var tournamentResult = TournamentSelectionService.Select(population.CurrentGeneration.Individuals);
 
                 //cross parents by partially mapped               
-                var crossResult = CrossoverService.SelectParentsAndCrossIfPossible(tournamentResult);
+                var crossResult = CrossoverService.SelectParentsAndCrossIfPossible(tournamentResult);               
 
                 //mutate using swap mutation
-                var mutatedElements = MutationService.Mutate(crossResult);
-
-                //check elements duplicated
-                var checkPoint1 = CheckIndividualHasRepeatedGene(mutatedElements);
-                if (checkPoint1.Item1 == true)
-                {
-                    throw new Exception("IndividualHasRepeatedGene GA3");
-                }
+                var mutatedElements = MutationService.Mutate(crossResult);                
 
                 //evaluate mutated elements
                 mutatedElements = CleanEvaluationDataFitness(mutatedElements, actualIteration);
@@ -139,27 +132,7 @@ namespace GrammaticalEvolution.Services
 
             return individuals;
         }
-
-
-        private Tuple<bool, List<Individual>> CheckIndividualHasRepeatedGene(List<Individual> individuals)
-        {
-            var hasRepeated = false;
-            var individualWithRepeatedGene = new List<Individual>();
-
-            foreach (var ind in individuals)
-            {
-                var notRepeatedGenesLength = ind.Genotype.Distinct().Count();
-
-                if (notRepeatedGenesLength < ind.Genotype.Count)
-                {
-                    hasRepeated = true;
-                    individualWithRepeatedGene.Add(ind);
-                }
-            }
-
-            return new Tuple<bool, List<Individual>>(hasRepeated, individualWithRepeatedGene);
-        }
-
+               
 
     }
 }

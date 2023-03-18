@@ -31,8 +31,7 @@ namespace GrammaticalEvolution.Services
 
             for (int i = 1; i <= initialNumberPopulation; i++)
             {
-                //var numberCodons = _randomGeneratorNumbersService.GetInt(numberMinCodons, numberMaxCodons);
-                var numberCodons = numberMaxCodons; //TODO: TEMPORAL SOLUTION
+                var numberCodons = _randomGeneratorNumbersService.GetInt(numberMinCodons, numberMaxCodons);               
                 var codonsIndexes = _randomGeneratorNumbersService.GetUniqueInts(numberCodons, 1, maxValueCodon + 1);
                 if (codonsIndexes == null)
                 {

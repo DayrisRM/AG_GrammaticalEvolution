@@ -14,13 +14,13 @@ namespace GrammaticalEvolution.Services
 
         private double _crossoverProbability { get; set; }
 
-        private ICrossoverService _partiallyMappedCrossoverService { get; set; }
+        private ICrossoverService _onePointCrossoverService { get; set; }
 
         private RandomGeneratorNumbersService _randomGeneratorNumbersService { get; set; }
 
         public CrossoverService(double crossoverProbability)
         {
-            _partiallyMappedCrossoverService = new PartiallyMappedCrossoverService();
+            _onePointCrossoverService = new OnePointCrossoverService();
             _randomGeneratorNumbersService = new RandomGeneratorNumbersService();
             _crossoverProbability = crossoverProbability;
         }
@@ -36,13 +36,12 @@ namespace GrammaticalEvolution.Services
             {
                 var parent1 = parents[i];
                 var parent2 = parents[i + 1];
-
-                //TODO: check if parents are equal. if equal do something
+               
 
                 var p = _randomGeneratorNumbersService.GetDouble();
                 if(p <= _crossoverProbability) 
                 {
-                    var crossoverResult = _partiallyMappedCrossoverService.Cross(new List<Individual>() { (Individual)parent1.Clone(), (Individual)parent2.Clone() });
+                    var crossoverResult = _onePointCrossoverService.Cross(new List<Individual>() { (Individual)parent1.Clone(), (Individual)parent2.Clone() });
                     chields.AddRange(crossoverResult);
                 }
                 else 
