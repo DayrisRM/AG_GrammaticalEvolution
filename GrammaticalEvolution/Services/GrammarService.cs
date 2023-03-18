@@ -44,8 +44,7 @@ namespace GrammaticalEvolution.Services
             }
 
             if (position >= chromosome.Count())
-            {
-                //add wrapping
+            {                
                 if (_allowWrapping && _actualWrapping <= _maxWrapping) 
                 {
                     position = 0;
@@ -53,7 +52,7 @@ namespace GrammaticalEvolution.Services
                 }
                 else 
                 {
-                    throw new Exception($"Wrapping exception - position > chromosome.Count -- position:{position} - chromosomeCount:{chromosome.Count}");
+                    return grammarFn;
                 }
             } 
 
