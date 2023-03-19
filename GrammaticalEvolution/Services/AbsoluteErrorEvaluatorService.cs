@@ -29,7 +29,7 @@ namespace GrammaticalEvolution.Services
             var sumError = GetSumError(_functionToEval, individual);
             var eval = ((double)1 / _functionToEval.M) * sumError;
 
-            eval = Math.Round(eval, 4);
+            //eval = Math.Round(eval, 4);
 
             individual.AbsoluteErrorEval = eval;
         }
@@ -58,11 +58,12 @@ namespace GrammaticalEvolution.Services
         private double GetSumError(Function functionToEval, Individual individual)
         {
             double sumError = 0;
+            bool reachHit = true;
 
             foreach (var x in functionToEval.MValues)
             {
                 //eval fn
-                var fnVal = FunEval(functionToEval.Name, x);
+                var fnVal = FunEval(functionToEval, x);
 
                 //eval grammarFn
                 var grammarVal = GrammarEval(individual.Grammar, x);  
@@ -77,12 +78,15 @@ namespace GrammaticalEvolution.Services
 
                 //get w
                 var w = GetW(abs);
+                if (w != 1) reachHit = false;
 
                 sumError += w * abs;
                 
                 individual.EvaluationData.Add(x, new Evaluation() { FunctionEval = fnVal, GrammarEval = grammarVal });
 
             }
+
+            individual.ReachHit = reachHit;
 
             return sumError;
         }
@@ -92,27 +96,11 @@ namespace GrammaticalEvolution.Services
             return GrammarEvaluator.Eval(grammar, x);           
         }
 
-        private double FunEval(string functionName, double x)
+        private double FunEval(Function function, double x)
         {
-            double eval = 0;
-
-            switch (functionName)
-            {
-                case "F1":
-                    eval = FunctionUtils.F1(x);
-                    break;
-                case "F2":
-                    eval = FunctionUtils.F2(x);
-                    break;
-                case "F3":
-                    eval = FunctionUtils.F3(x);
-                    break;
-                case "F4":
-                    eval = FunctionUtils.F4(x);
-                    break;
-            }
-
-            eval = Math.Round(eval, 4);
+            double eval = function.Coords.Where(t => t.X == x).Select(x => x.Y).FirstOrDefault();
+           
+            //eval = Math.Round(eval, 4);
 
             return eval;
         }

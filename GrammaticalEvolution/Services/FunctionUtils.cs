@@ -50,9 +50,8 @@ namespace GrammaticalEvolution.Services
         public static double Kp(double x, double a, double b, double d)
         {            
             var basePart = (a * x) + b;
-            var pow = Math.Pow(basePart, d); 
-            
-            return RoundDouble(pow);
+            var pow = Math.Pow(basePart, d);             
+            return pow;
         }
 
         public static double Ks(double x, double a, double b)
