@@ -14,23 +14,19 @@ namespace GrammaticalEvolution.Services
         
         private readonly IRandomGeneratorNumbersService _randomGeneratorNumbersService;
 
-        private SwapMutationService _swapMutationService { get; set; }
+        private IMutationService<List<int>, List<int>> _randomResettingMutationService { get; set; }
 
-        public MutationService(double mutationProbability, IRandomGeneratorNumbersService randomGeneratorNumbersService)
+        private Tuple<int, int> _mutationIndex { get; set; }
+
+        public MutationService(double mutationProbability, IRandomGeneratorNumbersService randomGeneratorNumbersService, Tuple<int, int> mutationIndex)
         {
             _randomGeneratorNumbersService = randomGeneratorNumbersService;
-            _swapMutationService = new SwapMutationService(_randomGeneratorNumbersService);
             _mutationProbability = mutationProbability;
+            _mutationIndex = mutationIndex;
+            _randomResettingMutationService = new RandomResettingMutationService(_randomGeneratorNumbersService, _mutationProbability, _mutationIndex);
+            
         }
-
-        public MutationService(RandomGeneratorNumbersService randomGeneratorNumbersService, SwapMutationService swapMutationService)
-        {
-            _randomGeneratorNumbersService = randomGeneratorNumbersService;
-            _swapMutationService = swapMutationService;
-        }
-
-
-
+        
         public List<Individual> Mutate(List<Individual> individuals)
         {
             if (!individuals.Any())
@@ -38,13 +34,7 @@ namespace GrammaticalEvolution.Services
 
             foreach (var individual in individuals)
             {
-                var p = _randomGeneratorNumbersService.GetDouble();
-
-                if (p < _mutationProbability)
-                {
-                    _swapMutationService.Mutate(individual.Genotype);
-                }
-
+                individual.Genotype = _randomResettingMutationService.Mutate(individual.Genotype);
             }
 
             return individuals;
