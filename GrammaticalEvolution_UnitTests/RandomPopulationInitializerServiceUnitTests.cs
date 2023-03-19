@@ -9,7 +9,8 @@ namespace GrammaticalEvolution_UnitTests
         [Test]
         public void Initialize_WithCorrectParameters_ShouldHaveInitialNumberPopulation()
         {
-            var randomPopulationInitializer = new RandomPopulationInitializerService();
+            RandomGeneratorNumbersService _randomGeneratorNumbersService = new RandomGeneratorNumbersService();
+            var randomPopulationInitializer = new RandomPopulationInitializerService(_randomGeneratorNumbersService);
             var numberMinCodons = 16;
             var numberMaxCodons = 100;
             var maxValueCodon = 256;

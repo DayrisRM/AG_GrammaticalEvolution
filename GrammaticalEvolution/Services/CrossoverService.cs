@@ -15,14 +15,14 @@ namespace GrammaticalEvolution.Services
         private double _crossoverProbability { get; set; }
 
         private ICrossoverService _onePointCrossoverService { get; set; }
+        
+        private readonly IRandomGeneratorNumbersService _randomGeneratorNumbersService;
 
-        private RandomGeneratorNumbersService _randomGeneratorNumbersService { get; set; }
-
-        public CrossoverService(double crossoverProbability)
-        {
-            _onePointCrossoverService = new OnePointCrossoverService();
-            _randomGeneratorNumbersService = new RandomGeneratorNumbersService();
+        public CrossoverService(double crossoverProbability, IRandomGeneratorNumbersService randomGeneratorNumbersService)
+        {            
+            _randomGeneratorNumbersService = randomGeneratorNumbersService;
             _crossoverProbability = crossoverProbability;
+            _onePointCrossoverService = new OnePointCrossoverService(_randomGeneratorNumbersService);
         }
 
         public List<Individual> SelectParentsAndCrossIfPossible(List<Individual> parents) 
@@ -38,7 +38,7 @@ namespace GrammaticalEvolution.Services
                 var parent2 = parents[i + 1];
                
 
-                var p = _randomGeneratorNumbersService.GetDouble();
+                var p = _randomGeneratorNumbersService.GetDouble();                
                 if(p <= _crossoverProbability) 
                 {
                     var crossoverResult = _onePointCrossoverService.Cross(new List<Individual>() { (Individual)parent1.Clone(), (Individual)parent2.Clone() });

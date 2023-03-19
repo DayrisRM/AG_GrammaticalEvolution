@@ -9,15 +9,11 @@ using GrammaticalEvolution_Common.Models;
 namespace GrammaticalEvolution.Services
 {
     public class SwapMutationService : IMutationService<List<int>, List<int>>
-    {        
-        private RandomGeneratorNumbersService _randomGeneratorNumbersService { get; set; }
+    {       
+       
+        private readonly IRandomGeneratorNumbersService _randomGeneratorNumbersService;
 
-        public SwapMutationService()
-        {
-            _randomGeneratorNumbersService = new RandomGeneratorNumbersService();
-        }
-
-        public SwapMutationService(RandomGeneratorNumbersService randomGeneratorNumbersService)
+        public SwapMutationService(IRandomGeneratorNumbersService randomGeneratorNumbersService)
         {
             _randomGeneratorNumbersService = randomGeneratorNumbersService;
         }

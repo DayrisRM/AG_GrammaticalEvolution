@@ -11,15 +11,15 @@ namespace GrammaticalEvolution.Services
     public class MutationService
     {
         private double _mutationProbability { get; set; }
-
-        private RandomGeneratorNumbersService _randomGeneratorNumbersService { get; set; }
+        
+        private readonly IRandomGeneratorNumbersService _randomGeneratorNumbersService;
 
         private SwapMutationService _swapMutationService { get; set; }
 
-        public MutationService(double mutationProbability)
+        public MutationService(double mutationProbability, IRandomGeneratorNumbersService randomGeneratorNumbersService)
         {
-            _randomGeneratorNumbersService = new RandomGeneratorNumbersService();
-            _swapMutationService = new SwapMutationService();
+            _randomGeneratorNumbersService = randomGeneratorNumbersService;
+            _swapMutationService = new SwapMutationService(_randomGeneratorNumbersService);
             _mutationProbability = mutationProbability;
         }
 

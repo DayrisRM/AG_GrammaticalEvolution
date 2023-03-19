@@ -38,6 +38,7 @@ namespace GrammaticalEvolution.Services
             var bestIndividual = new Individual()
             {
                 Grammar = population.BestIndividual.Grammar,
+                ReachHit = population.BestIndividual.ReachHit,
                 AbsoluteErrorEval = population.BestIndividual.AbsoluteErrorEval,
                 EvaluationData = population.BestIndividual.EvaluationData
             };

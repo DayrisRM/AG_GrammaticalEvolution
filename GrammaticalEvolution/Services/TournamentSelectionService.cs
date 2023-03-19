@@ -14,13 +14,13 @@ namespace GrammaticalEvolution.Services
         private int _numberOfTournament { get; set; }
         private int _sizeOfTournament { get; set; } = 2;
 
-        private RandomGeneratorNumbersService _randomGeneratorNumbersService;
+        private readonly IRandomGeneratorNumbersService _randomGeneratorNumbersService;
         
 
-        public TournamentSelectionService(int numberOfTournament)
+        public TournamentSelectionService(int numberOfTournament, IRandomGeneratorNumbersService randomGeneratorNumbersService)
         {
             _numberOfTournament = numberOfTournament;           
-            _randomGeneratorNumbersService = new RandomGeneratorNumbersService();
+            _randomGeneratorNumbersService = randomGeneratorNumbersService;
         }
 
         public List<Individual> Select(List<Individual> individuals)

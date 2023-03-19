@@ -13,8 +13,9 @@ namespace GrammaticalEvolution_Common.Models
         public List<int> Genotype { get; set; } = new List<int>();       
         public string Grammar { get; set; }       
         public double AbsoluteErrorEval { get; set; }
-
         public Dictionary<double, Evaluation> EvaluationData { get; set; } = new Dictionary<double, Evaluation>();
+
+        public bool ReachHit { get; set; }
 
         public object Clone()
         {

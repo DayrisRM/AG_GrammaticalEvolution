@@ -5,11 +5,12 @@ namespace GrammaticalEvolution.Services
 {
     public class RandomPopulationInitializerService : IPopulationInitializerService
     {
-        private RandomGeneratorNumbersService _randomGeneratorNumbersService;
 
-        public RandomPopulationInitializerService()
+        private readonly IRandomGeneratorNumbersService _randomGeneratorNumbersService;
+
+        public RandomPopulationInitializerService(IRandomGeneratorNumbersService randomGeneratorNumbersService)
         {
-            _randomGeneratorNumbersService = new RandomGeneratorNumbersService();
+            _randomGeneratorNumbersService = randomGeneratorNumbersService;
         }
 
         public Population Initialize(int numberMinCodons, int numberMaxCodons, int maxValueCodon, int initialNumberPopulation)

@@ -13,5 +13,20 @@ namespace GrammaticalEvolution_Common.Models
         public int IntervalMax { get; set; }
         public int M { get; set; }
         public List<double> MValues { get; set; } = new List<double>();
+        public List<Coords> Coords { get; set; } = new List<Coords> { };
     }
+
+    public struct Coords
+    {
+        public double X { get; }
+        public double Y { get; }
+
+        public Coords(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
+        
+    }
+
 }

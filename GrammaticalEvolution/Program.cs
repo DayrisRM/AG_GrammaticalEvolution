@@ -2,8 +2,8 @@
 using GrammaticalEvolution.Abstractions;
 using GrammaticalEvolution.Services;
 using GrammaticalEvolution_Common.Models;
-using System.Collections.Generic;
 using TSP_Visualization;
+
 
 Console.WriteLine("Hello, World!");
 
@@ -19,10 +19,10 @@ var executionData = new ExecutionGA()
     MaxWrapping = 2,
     AllowWrapping = true,
     CrossoverProbability = 0.9,
-    MutationProbability = 0.2
+    MutationProbability = 0.7
 };
 
-
+CreatePlot createPlot = new CreatePlot(executionData.NumberExecutions, executionData.NumberIterations, executionData.CrossoverProbability, executionData.MutationProbability);
 
 //Load grammar BNF
 LoadFileGrammarBNFService loadFileGrammarBNFService = new LoadFileGrammarBNFService();
@@ -30,8 +30,11 @@ var grammarBNF = loadFileGrammarBNFService.LoadFile("grammarbnf.txt");
 
 //create functions to symbolic regression
 IFunctionInitializer functionInitializerService = new FunctionInitializerService();
+IEvaluator<Function, Function> functionEvaluatorService = new FunctionEvaluatorService();
 var functions = functionInitializerService.Initialize();
-var selectedFn = functions["F2"];
+var selectedFn = functions["F3"];
+selectedFn = functionEvaluatorService.Evaluate(selectedFn);
+createPlot.CreateFunctionEval(selectedFn);
 
 ExecuteGA();
 
@@ -93,8 +96,7 @@ void ExecuteGA()
     var pm = executionData.MutationProbability.ToString().Replace('.', '_');
     
     //Create Plots
-    Console.WriteLine("Generating plots...");
-    CreatePlot createPlot = new CreatePlot(executionData.NumberExecutions, executionData.NumberIterations, executionData.CrossoverProbability, executionData.MutationProbability);
+    Console.WriteLine("Generating plots...");    
     createPlot.CreateProgressCurve(savedPopulation);
 
     Console.WriteLine("Generated plots in /Data/figures");

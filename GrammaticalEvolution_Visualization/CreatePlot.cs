@@ -85,5 +85,28 @@ namespace TSP_Visualization
             plt.SaveFig(@"../../../Data/figures/" + fileName);
 
         }
+
+        public void CreateFunctionEval(Function function)
+        {
+            var plt = new ScottPlot.Plot();
+
+            var title = $"Eval fn {function.Name}";
+            plt.Title(title);
+            var fileName = $"f_eval_{function.Name}.png";
+
+            double[] xs = function.Coords.Select(x => x.X).ToArray();
+            double[] fEval = function.Coords.Select(x => x.Y).ToArray();           
+
+            plt.AddScatter(xs, fEval, label: "F");            
+            plt.Legend();
+
+            plt.XAxis.Label("x");
+            plt.YAxis.Label("eval");
+
+            plt.SaveFig(@"../../../Data/figures/" + fileName);
+
+        }
+
+
     }
 }

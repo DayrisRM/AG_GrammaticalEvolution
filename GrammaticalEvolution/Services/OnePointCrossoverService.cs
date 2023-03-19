@@ -4,15 +4,10 @@ using GrammaticalEvolution_Common.Models;
 namespace GrammaticalEvolution.Services
 {
     public class OnePointCrossoverService : ICrossoverService
-    {
-        private RandomGeneratorNumbersService _randomGeneratorNumbersService { get; set; }
+    {        
+        private readonly IRandomGeneratorNumbersService _randomGeneratorNumbersService;
 
-        public OnePointCrossoverService()
-        {
-            _randomGeneratorNumbersService = new RandomGeneratorNumbersService();
-        }
-
-        public OnePointCrossoverService(RandomGeneratorNumbersService randomGeneratorNumbersService)
+        public OnePointCrossoverService(IRandomGeneratorNumbersService randomGeneratorNumbersService)
         {
             _randomGeneratorNumbersService = randomGeneratorNumbersService;
         }
