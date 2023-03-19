@@ -40,7 +40,7 @@ namespace GrammaticalEvolution.Services
             return _Random.Next(min, max);
         }
 
-        public double GetDouble()
+        public virtual double GetDouble()
         {
             return _Random.NextDouble();
         }
