@@ -64,7 +64,7 @@ namespace GrammaticalEvolution.Services
             FitnessCalculatorService = new FitnessCalculatorService(functionToEval, GrammarService);
             TournamentSelectionService = new TournamentSelectionService(_initialNumberPopulation, RandomGeneratorNumbersService);
             CrossoverService = new CrossoverService(_crossoverProbability, RandomGeneratorNumbersService);
-            MutationService = new MutationService(_mutationProbability, RandomGeneratorNumbersService);
+            MutationService = new MutationService(_mutationProbability, RandomGeneratorNumbersService, new Tuple<int, int>(0, _numberMaxCodons));
             ElitistSurvivorsSelectionService = new ElitistSurvivorsSelectionService();
             PopulationService = new PopulationService();
             LoadFileGrammarBNFService = new LoadFileGrammarBNFService();
