@@ -29,8 +29,6 @@ namespace GrammaticalEvolution.Services
             var sumError = GetSumError(_functionToEval, individual);
             var eval = ((double)1 / _functionToEval.M) * sumError;
 
-            //eval = Math.Round(eval, 4);
-
             individual.AbsoluteErrorEval = eval;
         }
 
@@ -68,10 +66,10 @@ namespace GrammaticalEvolution.Services
                 //eval grammarFn
                 var grammarVal = GrammarEval(individual.Grammar, x);  
                 
-                if(grammarVal == 0) 
-                {
-                    Console.WriteLine($"GrammarEval is 0 ---> grammar:{individual.Grammar} -- x:{x} -- fEval: {fnVal}");
-                }
+                //if(grammarVal == 0) 
+                //{
+                //    Console.WriteLine($"GrammarEval is 0 ---> grammar:{individual.Grammar} -- x:{x} -- fEval: {fnVal}");
+                //}
 
                 //get absFN
                 var abs = GetAbsFn(fnVal, grammarVal);

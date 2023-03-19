@@ -2,17 +2,17 @@
 using GrammaticalEvolution.Abstractions;
 using GrammaticalEvolution.Services;
 using GrammaticalEvolution_Common.Models;
-using System.Collections.Generic;
 using TSP_Visualization;
+
 
 Console.WriteLine("Hello, World!");
 
 var executionData = new ExecutionGA()
 {
     GrammarBNFFile = "grammarbnf.txt",
-    InitialNumberPopulation = 100,    
+    InitialNumberPopulation = 10,    
     NumberIterations = 100,
-    NumberExecutions = 10,
+    NumberExecutions = 1,
     NumberMinCodons = 30,
     NumberMaxCodons = 100,
     MaxValueCodon = 255,

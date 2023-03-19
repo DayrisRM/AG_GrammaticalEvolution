@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GrammaticalEvolution.Abstractions;
 
 namespace GrammaticalEvolution.Services
 {
-    public class RandomGeneratorNumbersService
+    public class RandomGeneratorNumbersService : IRandomGeneratorNumbersService
     {
         public static readonly Random _Random = new();
 

@@ -11,14 +11,9 @@ namespace GrammaticalEvolution.Services
 {
     public class PartiallyMappedCrossoverService : ICrossoverService
     {
-        private RandomGeneratorNumbersService _randomGeneratorNumbersService { get; set; }       
+        private readonly IRandomGeneratorNumbersService _randomGeneratorNumbersService;
 
-        public PartiallyMappedCrossoverService()
-        {
-            _randomGeneratorNumbersService = new RandomGeneratorNumbersService();
-        }
-
-        public PartiallyMappedCrossoverService(RandomGeneratorNumbersService randomGeneratorNumbersService)
+        public PartiallyMappedCrossoverService(IRandomGeneratorNumbersService randomGeneratorNumbersService)
         {
             _randomGeneratorNumbersService = randomGeneratorNumbersService;
         }

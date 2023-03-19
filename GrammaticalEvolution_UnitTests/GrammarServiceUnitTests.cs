@@ -221,19 +221,5 @@ namespace GrammaticalEvolution_UnitTests
             Assert.IsTrue(grammarFn.Contains(">").Equals(false));
         }
 
-        [Test]
-        public void Grammar3TestErrorrrr()
-        {
-            var grammarService = InitializeGrammar2Service();
-            var chromosome = new List<int>()
-            {
-                165,56,138,254,77,246,107,164,103,22,21,97,81,207,127,83,121,25,12,115,59,2,90,72,203,157,231,144,232,163
-            };
-
-            var grammarFn = grammarService.GetGrammar(chromosome);
-            Assert.IsNotNull(grammarFn);
-            Assert.IsTrue(grammarFn.Contains("<").Equals(false));
-            Assert.IsTrue(grammarFn.Contains(">").Equals(false));
-        }
     }
 }

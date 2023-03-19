@@ -37,6 +37,8 @@ namespace GrammaticalEvolution.Services
 
         private IAbsoluteErrorEvaluator AbsoluteErrorEvaluatorService { get; set; }
 
+        private IRandomGeneratorNumbersService RandomGeneratorNumbersService { get; set; }
+
         private GrammarService GrammarService { get; set; }
 
 
@@ -55,12 +57,14 @@ namespace GrammaticalEvolution.Services
             _allowWrapping = allowWrapping;
             _maxWrapping = maxWrapping;
 
-            PopulationInitializerService = new RandomPopulationInitializerService();
+            RandomGeneratorNumbersService = new RandomGeneratorNumbersService();
+
+            PopulationInitializerService = new RandomPopulationInitializerService(RandomGeneratorNumbersService);
             GrammarService = new GrammarService(grammar, _allowWrapping, _maxWrapping);
             FitnessCalculatorService = new FitnessCalculatorService(functionToEval, GrammarService);
-            TournamentSelectionService = new TournamentSelectionService(_initialNumberPopulation);
-            CrossoverService = new CrossoverService(_crossoverProbability);
-            MutationService = new MutationService(_mutationProbability);
+            TournamentSelectionService = new TournamentSelectionService(_initialNumberPopulation, RandomGeneratorNumbersService);
+            CrossoverService = new CrossoverService(_crossoverProbability, RandomGeneratorNumbersService);
+            MutationService = new MutationService(_mutationProbability, RandomGeneratorNumbersService);
             ElitistSurvivorsSelectionService = new ElitistSurvivorsSelectionService();
             PopulationService = new PopulationService();
             LoadFileGrammarBNFService = new LoadFileGrammarBNFService();

@@ -32,8 +32,7 @@ namespace GrammaticalEvolution_UnitTests
                                         NumberStyles.Float | NumberStyles.AllowExponent,
                                         CultureInfo.InvariantCulture);
 
-            var valueKG = FunctionUtils.Kg(x, Convert.ToDouble(parameter1), Convert.ToDouble(parameter2));
-            valueKG = Math.Round(valueKG, 4);
+            var valueKG = FunctionUtils.Kg(x, Convert.ToDouble(parameter1), Convert.ToDouble(parameter2));            
 
             Assert.That(kgVal.Contains($"*({valueKG})") == true);
         }
@@ -135,66 +134,7 @@ namespace GrammaticalEvolution_UnitTests
             var val = grammarEvaluatorService.Eval(grammar, x);
             Assert.IsNotNull(val);
             Assert.That(val != 0);            
-        }
-
-        [Test]
-        public void toDelete()
-        {
-            GrammarEvaluatorService grammarEvaluatorService = new GrammarEvaluatorService();
-            var param1 = "3.5E-4";
-            var param2 = "2.2E-6";
-            var param3 = 2;
-
-            var grammar = $"KP({param1},{param2},{param3})";
-            var x = -2;
-            var kgVal = grammarEvaluatorService.GetKernel(grammar, x, "KP");
-            Assert.IsNotNull(kgVal);
-            Assert.That(kgVal.Contains("KP") != true);
-
-            var parameter1 = Decimal.Parse(
-                                        param1,
-                                        NumberStyles.Float | NumberStyles.AllowExponent,
-                                        CultureInfo.InvariantCulture);
-
-            var parameter2 = Decimal.Parse(
-                                        param2,
-                                        NumberStyles.Float | NumberStyles.AllowExponent,
-                                        CultureInfo.InvariantCulture);
-
-            var valueKG = FunctionUtils.Kp(x, Convert.ToDouble(parameter1), Convert.ToDouble(parameter2), param3);
-            valueKG = Math.Round(valueKG, 4);
-
-            Assert.That(kgVal.Contains($"*({valueKG})") == true);
-        }
-
-        [Test]
-        public void toDeleteKG()
-        {
-            GrammarEvaluatorService grammarEvaluatorService = new GrammarEvaluatorService();
-            var param1 = "3.8E+8";
-            var param2 = "8.4E+2";
-            var param3 = 2;
-
-            var grammar = $"KG({param1},{param2},{param3})";
-            var x = 1.7;
-            var kgVal = grammarEvaluatorService.GetKernel(grammar, x, "KG");
-            Assert.IsNotNull(kgVal);
-            Assert.That(kgVal.Contains("KG") != true);
-
-            var parameter1 = Decimal.Parse(
-                                        param1,
-                                        NumberStyles.Float | NumberStyles.AllowExponent,
-                                        CultureInfo.InvariantCulture);
-
-            var parameter2 = Decimal.Parse(
-                                        param2,
-                                        NumberStyles.Float | NumberStyles.AllowExponent,
-                                        CultureInfo.InvariantCulture);
-
-            var valueKG = FunctionUtils.Kg(x, Convert.ToDouble(parameter1), Convert.ToDouble(parameter2));
-            
-            Assert.That(kgVal.Contains($"*({valueKG})") == true);
-        }
+        }        
 
     }
 }
