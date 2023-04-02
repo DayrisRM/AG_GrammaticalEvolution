@@ -10,16 +10,17 @@ Console.WriteLine("Hello, World!");
 var executionData = new ExecutionGA()
 {
     GrammarBNFFile = "grammarbnf.txt",
-    InitialNumberPopulation = 10,    
-    NumberIterations = 100,
-    NumberExecutions = 1,
+    InitialNumberPopulation = 500,    
+    NumberIterations = 60,
+    NumberExecutions = 5,
     NumberMinCodons = 30,
     NumberMaxCodons = 100,
     MaxValueCodon = 255,
     MaxWrapping = 2,
     AllowWrapping = true,
-    CrossoverProbability = 0.9,
-    MutationProbability = 0.7
+    CrossoverProbability = 0.7,
+    MutationProbability = 0.4,
+    AllowLocalSearch = true,
 };
 
 CreatePlot createPlot = new CreatePlot(executionData.NumberExecutions, executionData.NumberIterations, executionData.CrossoverProbability, executionData.MutationProbability);
@@ -32,7 +33,7 @@ var grammarBNF = loadFileGrammarBNFService.LoadFile("grammarbnf.txt");
 IFunctionInitializer functionInitializerService = new FunctionInitializerService();
 IEvaluator<Function, Function> functionEvaluatorService = new FunctionEvaluatorService();
 var functions = functionInitializerService.Initialize();
-var selectedFn = functions["F3"];
+var selectedFn = functions["F2"];
 selectedFn = functionEvaluatorService.Evaluate(selectedFn);
 createPlot.CreateFunctionEval(selectedFn);
 
@@ -54,7 +55,7 @@ void ExecuteGA()
 
         GeneticAlgorithmService geneticAlgorithmService = new GeneticAlgorithmService(executionData.InitialNumberPopulation, executionData.NumberIterations,
         executionData.CrossoverProbability, executionData.MutationProbability, selectedFn, executionData.NumberMinCodons, executionData.NumberMaxCodons,
-        executionData.MaxValueCodon, executionData.AllowWrapping, executionData.MaxWrapping, grammarBNF);
+        executionData.MaxValueCodon, executionData.AllowWrapping, executionData.MaxWrapping, grammarBNF, executionData.AllowLocalSearch);
 
         var finalPopulation = geneticAlgorithmService.EvolveAlgorithm();
 
@@ -126,5 +127,6 @@ public class ExecutionGA
     public double MutationProbability { get; set; }
     public double CrossoverProbability { get; set; }
     public bool AllowWrapping { get; set; }
+    public bool AllowLocalSearch { get; set; }
 }
 
