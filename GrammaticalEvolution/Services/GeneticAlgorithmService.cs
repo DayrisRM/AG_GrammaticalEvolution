@@ -21,6 +21,7 @@ namespace GrammaticalEvolution.Services
         private int _maxWrapping { get; set; }
         private double _crossoverProbability { get; set; }
         private double _mutationProbability { get; set; }
+        private bool _allowLocalSearch { get; set; }
 
         private Function _functionToEval { get; set; }
 
@@ -41,10 +42,12 @@ namespace GrammaticalEvolution.Services
 
         private GrammarService GrammarService { get; set; }
 
+        private ILocalSearchService LocalSearchService { get; set; }
+
 
         public GeneticAlgorithmService(int initialNumberPopulation, int numberIterations, double crossoverProbability, 
             double mutationProbability, Function functionToEval, int numberMinCodons, int numberMaxCodons, int maxValueCodon,
-            bool allowWrapping, int maxWrapping, GrammarBNF grammar)
+            bool allowWrapping, int maxWrapping, GrammarBNF grammar, bool allowLocalSearch)
         {
             _initialNumberPopulation = initialNumberPopulation > 0 ? initialNumberPopulation : throw new ArgumentOutOfRangeException(nameof(initialNumberPopulation));
             _numberIterations = numberIterations > 0 ? numberIterations : throw new ArgumentOutOfRangeException(nameof(numberIterations));           
@@ -56,6 +59,7 @@ namespace GrammaticalEvolution.Services
             _maxValueCodon = maxValueCodon;
             _allowWrapping = allowWrapping;
             _maxWrapping = maxWrapping;
+            _allowLocalSearch = allowLocalSearch;
 
             RandomGeneratorNumbersService = new RandomGeneratorNumbersService();
 
@@ -68,7 +72,8 @@ namespace GrammaticalEvolution.Services
             ElitistSurvivorsSelectionService = new ElitistSurvivorsSelectionService();
             PopulationService = new PopulationService();
             LoadFileGrammarBNFService = new LoadFileGrammarBNFService();
-            AbsoluteErrorEvaluatorService = new AbsoluteErrorEvaluatorService(_functionToEval);            
+            AbsoluteErrorEvaluatorService = new AbsoluteErrorEvaluatorService(_functionToEval); 
+            LocalSearchService = new LocalSearchService(RandomGeneratorNumbersService, FitnessCalculatorService);
         }
 
         public Population EvolveAlgorithm() 
@@ -91,10 +96,10 @@ namespace GrammaticalEvolution.Services
                 //select parents by tournament              
                 var tournamentResult = TournamentSelectionService.Select(population.CurrentGeneration.Individuals);
 
-                //cross parents by partially mapped               
+                //cross parents by one point              
                 var crossResult = CrossoverService.SelectParentsAndCrossIfPossible(tournamentResult);               
 
-                //mutate using swap mutation
+                //mutate using 
                 var mutatedElements = MutationService.Mutate(crossResult);                
 
                 //evaluate mutated elements
@@ -103,6 +108,16 @@ namespace GrammaticalEvolution.Services
 
                 //select survivors
                 var newIndividuals = ElitistSurvivorsSelectionService.SelectIndividuals(population.CurrentGeneration.Individuals, mutatedElements);
+
+                if (_allowLocalSearch && 
+                    LocalSearchService.ShouldApplyLocalSearchByBestPerformance(newIndividuals, population.CurrentGeneration.Individuals)
+                    ) 
+                {
+                    Console.WriteLine("--> ApplyLocalSearch");
+                    newIndividuals = LocalSearchService.ApplyLocalSearch(newIndividuals, 
+                        LocalSearchDepthCriterion.OnlyOneTime, 
+                        LocalSearchProbability.NBestIndividuals);
+                }
 
                 //add new generation to population
                 PopulationService.CreateNewGeneration(population, newIndividuals);
