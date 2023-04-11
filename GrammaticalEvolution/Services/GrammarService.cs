@@ -131,5 +131,10 @@ namespace GrammaticalEvolution.Services
             return element;
         }
 
+        public int GetNumberOfKernelsInGrammar(string grammar) 
+        {
+            return grammar.Count(f => f == 'K');
+        }
+
     }
 }

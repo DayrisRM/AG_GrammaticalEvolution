@@ -221,5 +221,17 @@ namespace GrammaticalEvolution_UnitTests
             Assert.IsTrue(grammarFn.Contains(">").Equals(false));
         }
 
+        [Test]
+        [TestCase("+6.3E-4KS(4.0E-2,8.8E+0,nulo1)-2.9E-2KG(5.2E-3,6.4E+6,0)", 2)]
+        [TestCase("+6.3E-4", 0)]
+        [TestCase("", 0)]
+        [TestCase("+6.3E-4KS(4.0E-2,8.8E+0,nulo1)", 1)]
+        [TestCase("+6.3E-4KS(4.0E-2,8.8E+0,nulo1)-2.9E-2KS(5.2E-3,6.4E+6,0)-2.9E-2KS(5.2E-3,6.4E+6,0)", 3)]
+        public void GrammarService_GetNumberOfKernelsInGrammar_ShouldReturnExpected(string grammar, int expected) 
+        {
+            var grammarService = InitializeGrammarService();
+            var kernels = grammarService.GetNumberOfKernelsInGrammar(grammar);
+            Assert.That(kernels, Is.EqualTo(expected));
+        }
     }
 }

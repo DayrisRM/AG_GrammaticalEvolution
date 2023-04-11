@@ -10,7 +10,7 @@ Console.WriteLine("Hello, World!");
 var executionData = new ExecutionGA()
 {
     GrammarBNFFile = "grammarbnf.txt",
-    InitialNumberPopulation = 500,    
+    InitialNumberPopulation = 10,  //500  
     NumberIterations = 60,
     NumberExecutions = 5,
     NumberMinCodons = 30,
@@ -20,7 +20,7 @@ var executionData = new ExecutionGA()
     AllowWrapping = true,
     CrossoverProbability = 0.7,
     MutationProbability = 0.4,
-    AllowLocalSearch = true,
+    AllowLocalSearch = false,
 };
 
 CreatePlot createPlot = new CreatePlot(executionData.NumberExecutions, executionData.NumberIterations, executionData.CrossoverProbability, executionData.MutationProbability);
