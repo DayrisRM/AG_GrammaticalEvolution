@@ -22,6 +22,8 @@ namespace GrammaticalEvolution.Services
         private double _crossoverProbability { get; set; }
         private double _mutationProbability { get; set; }
         private bool _allowLocalSearch { get; set; }
+        private bool _allowFitnessPenalty { get; set; }
+        
 
         private Function _functionToEval { get; set; }
 
@@ -47,7 +49,7 @@ namespace GrammaticalEvolution.Services
 
         public GeneticAlgorithmService(int initialNumberPopulation, int numberIterations, double crossoverProbability, 
             double mutationProbability, Function functionToEval, int numberMinCodons, int numberMaxCodons, int maxValueCodon,
-            bool allowWrapping, int maxWrapping, GrammarBNF grammar, bool allowLocalSearch)
+            bool allowWrapping, int maxWrapping, GrammarBNF grammar, bool allowLocalSearch, bool allowFitnessPenalty)
         {
             _initialNumberPopulation = initialNumberPopulation > 0 ? initialNumberPopulation : throw new ArgumentOutOfRangeException(nameof(initialNumberPopulation));
             _numberIterations = numberIterations > 0 ? numberIterations : throw new ArgumentOutOfRangeException(nameof(numberIterations));           
@@ -60,11 +62,13 @@ namespace GrammaticalEvolution.Services
             _allowWrapping = allowWrapping;
             _maxWrapping = maxWrapping;
             _allowLocalSearch = allowLocalSearch;
+            _allowFitnessPenalty = allowFitnessPenalty;
 
             RandomGeneratorNumbersService = new RandomGeneratorNumbersService();
 
             PopulationInitializerService = new RandomPopulationInitializerService(RandomGeneratorNumbersService);
             GrammarService = new GrammarService(grammar, _allowWrapping, _maxWrapping);
+
             FitnessCalculatorService = new FitnessCalculatorService(functionToEval, GrammarService);
             TournamentSelectionService = new TournamentSelectionService(_initialNumberPopulation, RandomGeneratorNumbersService);
             CrossoverService = new CrossoverService(_crossoverProbability, RandomGeneratorNumbersService);
@@ -84,7 +88,7 @@ namespace GrammaticalEvolution.Services
             var population = PopulationInitializerService.Initialize(_numberMinCodons, _numberMaxCodons, _maxValueCodon, _initialNumberPopulation);
 
             //Evaluate population
-            CalculateFitness(population.CurrentGeneration.Individuals);
+            CalculateFitness(population.CurrentGeneration.Individuals, 1);
 
 
             //iterations
@@ -104,7 +108,7 @@ namespace GrammaticalEvolution.Services
 
                 //evaluate mutated elements
                 mutatedElements = CleanEvaluationDataFitness(mutatedElements, actualIteration);
-                CalculateFitness(mutatedElements);
+                CalculateFitness(mutatedElements, actualIteration);
 
                 //select survivors
                 var newIndividuals = ElitistSurvivorsSelectionService.SelectIndividuals(population.CurrentGeneration.Individuals, mutatedElements);
@@ -127,11 +131,11 @@ namespace GrammaticalEvolution.Services
             return population;
         }
 
-        private void CalculateFitness(List<Individual> individuals) 
+        private void CalculateFitness(List<Individual> individuals, int generationNumber) 
         {        
             foreach(var indx in individuals) 
             {               
-                FitnessCalculatorService.Evaluate(indx);                
+                FitnessCalculatorService.Evaluate(indx, _allowFitnessPenalty, generationNumber);                
             }
         }
 

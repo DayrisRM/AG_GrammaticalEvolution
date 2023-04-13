@@ -65,11 +65,6 @@ namespace GrammaticalEvolution.Services
 
                 //eval grammarFn
                 var grammarVal = GrammarEval(individual.Grammar, x);  
-                
-                //if(grammarVal == 0) 
-                //{
-                //    Console.WriteLine($"GrammarEval is 0 ---> grammar:{individual.Grammar} -- x:{x} -- fEval: {fnVal}");
-                //}
 
                 //get absFN
                 var abs = GetAbsFn(fnVal, grammarVal);
