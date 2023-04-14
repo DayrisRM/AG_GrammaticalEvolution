@@ -21,7 +21,8 @@ var executionData = new ExecutionGA()
     CrossoverProbability = 0.7,
     MutationProbability = 0.4,
     AllowLocalSearch = false,
-    AllowFitnessPenalty = true,
+    AllowFitnessPenalty = false,
+    AllowPmControl = true,
 };
 
 CreatePlot createPlot = new CreatePlot(executionData.NumberExecutions, executionData.NumberIterations, executionData.CrossoverProbability, executionData.MutationProbability);
@@ -56,7 +57,8 @@ void ExecuteGA()
 
         GeneticAlgorithmService geneticAlgorithmService = new GeneticAlgorithmService(executionData.InitialNumberPopulation, executionData.NumberIterations,
         executionData.CrossoverProbability, executionData.MutationProbability, selectedFn, executionData.NumberMinCodons, executionData.NumberMaxCodons,
-        executionData.MaxValueCodon, executionData.AllowWrapping, executionData.MaxWrapping, grammarBNF, executionData.AllowLocalSearch, executionData.AllowFitnessPenalty);
+        executionData.MaxValueCodon, executionData.AllowWrapping, executionData.MaxWrapping, grammarBNF, executionData.AllowLocalSearch, 
+        executionData.AllowFitnessPenalty, executionData.AllowPmControl);
 
         var finalPopulation = geneticAlgorithmService.EvolveAlgorithm();
 
@@ -130,5 +132,6 @@ public class ExecutionGA
     public bool AllowWrapping { get; set; }
     public bool AllowLocalSearch { get; set; }
     public bool AllowFitnessPenalty { get; set; }
+    public bool AllowPmControl { get; set; }
 }
 

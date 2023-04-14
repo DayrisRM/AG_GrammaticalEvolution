@@ -23,6 +23,7 @@ namespace GrammaticalEvolution.Services
         public List<int> Mutate(List<int> individuals)
         {
             var mutatedInd = new List<int>();
+            Console.WriteLine("--> Pm control - pm:" + _mutationProbability);
 
             foreach (var individual in individuals) 
             {
