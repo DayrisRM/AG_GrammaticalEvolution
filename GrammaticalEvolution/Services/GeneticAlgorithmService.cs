@@ -23,7 +23,9 @@ namespace GrammaticalEvolution.Services
         private double _mutationProbability { get; set; }
         private bool _allowLocalSearch { get; set; }
         private bool _allowFitnessPenalty { get; set; }
-        
+        private bool _allowPmControl { get; set; }
+
+
 
         private Function _functionToEval { get; set; }
 
@@ -49,7 +51,7 @@ namespace GrammaticalEvolution.Services
 
         public GeneticAlgorithmService(int initialNumberPopulation, int numberIterations, double crossoverProbability, 
             double mutationProbability, Function functionToEval, int numberMinCodons, int numberMaxCodons, int maxValueCodon,
-            bool allowWrapping, int maxWrapping, GrammarBNF grammar, bool allowLocalSearch, bool allowFitnessPenalty)
+            bool allowWrapping, int maxWrapping, GrammarBNF grammar, bool allowLocalSearch, bool allowFitnessPenalty, bool allowPmControl)
         {
             _initialNumberPopulation = initialNumberPopulation > 0 ? initialNumberPopulation : throw new ArgumentOutOfRangeException(nameof(initialNumberPopulation));
             _numberIterations = numberIterations > 0 ? numberIterations : throw new ArgumentOutOfRangeException(nameof(numberIterations));           
@@ -63,6 +65,7 @@ namespace GrammaticalEvolution.Services
             _maxWrapping = maxWrapping;
             _allowLocalSearch = allowLocalSearch;
             _allowFitnessPenalty = allowFitnessPenalty;
+            _allowPmControl = allowPmControl;
 
             RandomGeneratorNumbersService = new RandomGeneratorNumbersService();
 
@@ -72,7 +75,7 @@ namespace GrammaticalEvolution.Services
             FitnessCalculatorService = new FitnessCalculatorService(functionToEval, GrammarService);
             TournamentSelectionService = new TournamentSelectionService(_initialNumberPopulation, RandomGeneratorNumbersService);
             CrossoverService = new CrossoverService(_crossoverProbability, RandomGeneratorNumbersService);
-            MutationService = new MutationService(_mutationProbability, RandomGeneratorNumbersService, new Tuple<int, int>(0, _numberMaxCodons));
+            //MutationService = new MutationService(_mutationProbability, RandomGeneratorNumbersService, new Tuple<int, int>(0, _numberMaxCodons));
             ElitistSurvivorsSelectionService = new ElitistSurvivorsSelectionService();
             PopulationService = new PopulationService();
             LoadFileGrammarBNFService = new LoadFileGrammarBNFService();
@@ -90,6 +93,11 @@ namespace GrammaticalEvolution.Services
             //Evaluate population
             CalculateFitness(population.CurrentGeneration.Individuals, 1);
 
+            var pmControlValues = new Dictionary<int, double>();
+            if (_allowPmControl) 
+            {
+                pmControlValues = CalculatePmByGeneration(_numberIterations);
+            }
 
             //iterations
             var actualIteration = 1;
@@ -101,9 +109,22 @@ namespace GrammaticalEvolution.Services
                 var tournamentResult = TournamentSelectionService.Select(population.CurrentGeneration.Individuals);
 
                 //cross parents by one point              
-                var crossResult = CrossoverService.SelectParentsAndCrossIfPossible(tournamentResult);               
+                var crossResult = CrossoverService.SelectParentsAndCrossIfPossible(tournamentResult);
 
                 //mutate using 
+                if (_allowPmControl) 
+                {
+                    var pm = pmControlValues.ContainsKey(actualIteration) 
+                        ? pmControlValues[actualIteration] 
+                        : throw new Exception("Error Pm control");
+
+                    Console.WriteLine("--> Pm control - gen:" + actualIteration);
+                    MutationService = new MutationService(pm, RandomGeneratorNumbersService, new Tuple<int, int>(0, _numberMaxCodons));
+                }
+                else 
+                {
+                    MutationService = new MutationService(_mutationProbability, RandomGeneratorNumbersService, new Tuple<int, int>(0, _numberMaxCodons));
+                }
                 var mutatedElements = MutationService.Mutate(crossResult);                
 
                 //evaluate mutated elements
@@ -156,6 +177,18 @@ namespace GrammaticalEvolution.Services
             return individuals;
         }
                
+        private Dictionary<int, double> CalculatePmByGeneration(int _numberIterations) 
+        {
+            var pmValues = new Dictionary<int, double>();
 
+            for(var i = 1; i <= _numberIterations; i++) 
+            {
+                var genPow = Math.Pow(2, i);
+                var pm = 0.004166 + (0.11375 / genPow);
+                pmValues[i] = pm;
+            }
+
+            return pmValues;
+        }
     }
 }
